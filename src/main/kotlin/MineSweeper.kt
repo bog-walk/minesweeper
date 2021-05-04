@@ -57,6 +57,10 @@ class MineSweeper {
         println(if (gameOver) "You stepped on a mine and failed!" else "Congratulations! You found all the mines.")
     }
 
+    private fun parseMove() {
+
+    }
+
 //    private fun countNeighbourMines(row: Int, col: Int): Int {
 //        val n = listOf(-1, 0, 1)
 //        val x = n.map { it + col }
