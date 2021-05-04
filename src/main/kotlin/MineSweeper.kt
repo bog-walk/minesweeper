@@ -1,5 +1,61 @@
 class MineSweeper {
-    private val playingField = PlayingField(fieldSize, numMines)
+    private val gameBoard: GameBoard
+
+    init {
+        val fieldSize = getBoardStat()
+        // Should not be able to have every cell be a mine, right?
+        val numOfMines = getBoardStat(fieldSize * fieldSize, true)
+        gameBoard = GameBoard(fieldSize, numOfMines)
+        play()
+    }
+
+    private fun getBoardStat(max: Int = 50, mines: Boolean = false): Int {
+        var stat = 0
+        print(if (!mines) {
+            "How many rows do you want the field to take up? "
+        } else {
+            "How many mines do you want on the field? "
+        })
+        while (true) {
+            try {
+                stat = readLine()!!.toInt()
+                if (stat in 1..max) {
+                    break
+                } else {
+                    throw IllegalArgumentException()
+                }
+            } catch (e: NumberFormatException) {
+                println("Please enter a number.")
+            } catch (e: IllegalArgumentException) {
+                println("Number must be between 1 and $max inclusive.")
+            }
+        }
+        return stat
+    }
+
+    private fun play() {
+        gameBoard.drawGameBoard()
+        var gameOver = false
+        var gameWon = false
+        var gameStep = 0
+        step@ do {
+            gameStep++
+            print("Set/delete mines marks or claim a cell as free: ")
+            val (x, y, pred) = readLine()!!.trim().split(" ")
+            //if (x.toInt() !in (1..fieldSize) || y.toInt() !in (1..fieldSize)) throw java.lang.IllegalArgumentException("Invalid coordinates")
+            if (pred.toLowerCase() !in listOf("free", "mine")) throw java.lang.IllegalArgumentException("Invalid cell choice")
+            when (checkInput(x.toInt() - 1, y.toInt() - 1, pred.toLowerCase(), gameStep)) {
+                -1 -> {
+                    gameOver = true
+                    gameBoard.drawGameBoard()
+                }
+                1 -> gameBoard.drawGameBoard()
+                else -> (continue@step)
+            }
+            gameWon = gameBoard.checkMinesMarked() || gameBoard.checkRemainingCells()
+        } while (!gameOver && !gameWon)
+        println(if (gameOver) "You stepped on a mine and failed!" else "Congratulations! You found all the mines.")
+    }
 
 //    private fun countNeighbourMines(row: Int, col: Int): Int {
 //        val n = listOf(-1, 0, 1)

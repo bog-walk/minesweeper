@@ -1,4 +1,4 @@
-class PlayingField(
+class GameBoard(
     private val fieldSize: Int,
     private val numMines: Int
 ) {
