@@ -25,6 +25,14 @@ class GameBoard(
         }
     }
 
+    fun getCell(x: Int, y: Int): Cell {
+        try {
+            return board[x][y]
+        } catch (e: IndexOutOfBoundsException) {
+            throw IllegalArgumentException("Invalid cell coordinates")
+        }
+    }
+
     fun exploreCellsRevised(cell: Cell) {
         while (cell.state == CellState.EMPTY || cell.state == CellState.MARKED) {
             val n = listOf(-1, 0, 1)
@@ -55,12 +63,14 @@ class GameBoard(
         return predictions.size == numMines && predictions.all { it.foundMine }
     }
 
+    // Checks if cells remaining to either be predicted or have already been incorrectly marked
+    // Is this necessary or is checkMinesMarked() enough?
     fun checkRemainingCells(): Boolean {
         for (i in 0 until fieldSize) {
             for (j in 0 until fieldSize) {
                 val cell = board[i][j]
-                if ((cell.state == CellState.EMPTY || cell.state == CellState.MARKED) &&
-                    !cell.isMine) return false
+                if (cell.state == CellState.EMPTY ||
+                    cell.state == CellState.MARKED && !cell.isMine) return false
             }
         }
         return true
@@ -78,8 +88,10 @@ class GameBoard(
 
     fun predict(cell: Cell, isMine: Boolean = true) {
         if (isMine) {
+            cell.state = CellState.MARKED
             this.predictions.add(cell)
         } else {
+            cell.state = CellState.EMPTY
             this.predictions.remove(cell)
         }
     }

@@ -60,13 +60,11 @@ class MineSweeper {
             print("Choose a cell to set/delete a mine or claim as free: ")
             val (x, y, action) = readLine()!!.trim().lowercase().split(Regex("\\s+"))
             try {
-                if (x.toInt() !in (1..gameBoard.size) || y.toInt() !in (1..gameBoard.size)) {
-                    throw IllegalArgumentException("Invalid cell coordinates")
-                }
+                val cell = gameBoard.getCell(x.toInt() - 1, y.toInt() - 1)
                 if (action !in listOf("free", "mine")) {
                     throw IllegalArgumentException("Invalid action")
                 }
-                return Pair(Cell(x.toInt() - 1, y.toInt() - 1), action)
+                return Pair(cell, action)
             } catch (e: IllegalArgumentException) {
                 println(e.message)
             }
@@ -128,12 +126,10 @@ class MineSweeper {
             else -> {
                 when (cell.state) {
                     CellState.EMPTY -> {
-                        cell.state = CellState.MARKED
                         gameBoard.predict(cell)
                         1
                     }
                     CellState.MARKED -> {
-                        cell.state = CellState.EMPTY
                         gameBoard.predict(cell, false)
                         1
                     }
