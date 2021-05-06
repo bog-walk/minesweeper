@@ -84,16 +84,16 @@ class GameBoard(
         }
     }
 
-    fun drawGameBoard() {
-        println(" |${(1..fieldSize).joinToString("")}|")
-        println("-|${"-".repeat(fieldSize)}|")
+    fun drawGameBoard(): String {
+        var output = " |${(1..fieldSize).joinToString("")}|\n" +
+                "-|${"-".repeat(fieldSize)}|\n"
         for (i in 0 until fieldSize) {
-            print("${i + 1}|")
+            output += "${i + 1}|"
             for (j in 0 until fieldSize) {
-                print(board[i][j])
+                output += board[i][j]
             }
-            print("|\n")
+            output += "|\n"
         }
-        println("-|${"-".repeat(fieldSize)}|")
+        return output + "-|${"-".repeat(fieldSize)}|"
     }
 }

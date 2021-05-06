@@ -1,5 +1,5 @@
 enum class CellState(val mark: String) {
-    EMPTY("."),
+    EMPTY(" "),
     MINE("X"),
     MARKED("*"),
     SAFE("/")

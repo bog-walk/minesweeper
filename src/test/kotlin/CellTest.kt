@@ -21,7 +21,7 @@ internal class CellTest {
         val cellSurrounded = Cell(3, 18).apply {
             this.neighbourMines = 4
         }
-        assertEquals(".", cellEmpty.toString())
+        assertEquals(" ", cellEmpty.toString())
         assertEquals("X", cellMine.toString())
         assertEquals("4", cellSurrounded.toString())
     }
