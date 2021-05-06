@@ -40,11 +40,8 @@ class MineSweeper {
         var gameStep = 0
         step@ do {
             gameStep++
-            print("Set/delete mines marks or claim a cell as free: ")
-            val (x, y, pred) = readLine()!!.trim().split(" ")
-            //if (x.toInt() !in (1..fieldSize) || y.toInt() !in (1..fieldSize)) throw java.lang.IllegalArgumentException("Invalid coordinates")
-            if (pred.toLowerCase() !in listOf("free", "mine")) throw java.lang.IllegalArgumentException("Invalid cell choice")
-            when (checkInput(x.toInt() - 1, y.toInt() - 1, pred.toLowerCase(), gameStep)) {
+            val (cell, action) = parseMove()
+            when (checkInput(cell, action, gameStep)) {
                 -1 -> {
                     gameOver = true
                     gameBoard.drawGameBoard()
@@ -57,8 +54,23 @@ class MineSweeper {
         println(if (gameOver) "You stepped on a mine and failed!" else "Congratulations! You found all the mines.")
     }
 
-    private fun parseMove() {
-
+    // Creating cell using different coordinates based on drawn map, alter this in Gameboard
+    private fun parseMove(): Pair<Cell, String> {
+        do {
+            print("Choose a cell to set/delete a mine or claim as free: ")
+            val (x, y, action) = readLine()!!.trim().lowercase().split(Regex("\\s+"))
+            try {
+                if (x.toInt() !in (1..gameBoard.size) || y.toInt() !in (1..gameBoard.size)) {
+                    throw IllegalArgumentException("Invalid cell coordinates")
+                }
+                if (action !in listOf("free", "mine")) {
+                    throw IllegalArgumentException("Invalid action")
+                }
+                return Pair(Cell(x.toInt() - 1, y.toInt() - 1), action)
+            } catch (e: IllegalArgumentException) {
+                println(e.message)
+            }
+        } while (true)
     }
 
 //    private fun countNeighbourMines(row: Int, col: Int): Int {
@@ -92,38 +104,37 @@ class MineSweeper {
 //        }
 //    }
 
-    fun checkInput(x: Int, y: Int, pred: String, step: Int): Int {
-        return when (pred) {
+    private fun checkInput(cell: Cell, action: String, step: Int): Int {
+        return when (action) {
             "free" -> {
-                if (Pair(y, x) in minePositions) {
+                if (cell.isMine) {
                     if (step == 1) {
+                        // ???????? Reset game?
                         do {
-                            minePositions.clear()
-                            generateMineField()
-                        } while (Pair(y, x) in minePositions)
-                        exploreCellsRevised(y, x)
+                            //minePositions.clear()
+                            //generateMineField()
+                        } while (cell.isMine)
+                        gameBoard.exploreCellsRevised(cell)
                         1
                     } else {
-                        for (coords in minePositions) {
-                            playingField[coords.first][coords.second] = CellState.MINE.mark
-                        }
+                        gameBoard.showAllMines()
                         -1
                     }
-                } else if (playingField[y][x] == CellState.EMPTY.mark) {
-                    exploreCellsRevised(y, x)
+                } else if (cell.state == CellState.EMPTY) {
+                    gameBoard.exploreCellsRevised(cell)
                     1
                 } else 0
             }
             else -> {
-                when (playingField[y][x]) {
-                    CellState.EMPTY.mark -> {
-                        playingField[y][x] = CellState.MARKED.mark
-                        predictedMines.add(Pair(y, x))
+                when (cell.state) {
+                    CellState.EMPTY -> {
+                        cell.state = CellState.MARKED
+                        gameBoard.predict(cell)
                         1
                     }
-                    CellState.MARKED.mark -> {
-                        playingField[y][x] = CellState.EMPTY.mark
-                        predictedMines.remove(Pair(y, x))
+                    CellState.MARKED -> {
+                        cell.state = CellState.EMPTY
+                        gameBoard.predict(cell, false)
                         1
                     }
                     else -> 0

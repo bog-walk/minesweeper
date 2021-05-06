@@ -7,7 +7,7 @@ class GameBoard(
             Cell(row, col)
         }
     }
-    private val predictions = mutableListOf<Cell>()
+    private val predictions = mutableSetOf<Cell>()
 
     init {
         generateMineField()
@@ -25,7 +25,7 @@ class GameBoard(
         }
     }
 
-    private fun exploreCellsRevised(cell: Cell) {
+    fun exploreCellsRevised(cell: Cell) {
         while (cell.state == CellState.EMPTY || cell.state == CellState.MARKED) {
             val n = listOf(-1, 0, 1)
             val x = n.map { (it + cell.xCoord).coerceIn(0, fieldSize) }.toSet()
@@ -64,6 +64,24 @@ class GameBoard(
             }
         }
         return true
+    }
+
+    fun showAllMines() {
+        board.forEach { row ->
+            row.forEach { cell ->
+                if (cell.isMine) {
+                    cell.state = CellState.MINE
+                }
+            }
+        }
+    }
+
+    fun predict(cell: Cell, isMine: Boolean = true) {
+        if (isMine) {
+            this.predictions.add(cell)
+        } else {
+            this.predictions.remove(cell)
+        }
     }
 
     fun drawGameBoard() {
