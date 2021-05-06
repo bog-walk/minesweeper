@@ -10,7 +10,7 @@ class MineSweeper {
     }
 
     private fun getBoardStat(max: Int = 50, mines: Boolean = false): Int {
-        var stat = 0
+        var stat: Int
         print(if (!mines) {
             "How many rows do you want the field to take up? "
         } else {

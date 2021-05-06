@@ -43,8 +43,8 @@ class GameBoard(
             } else {
                 cell.state = CellState.SAFE
             }
-            neighbours.forEach { cell ->
-                if (!cell.isMine && cell.state != CellState.SAFE) {
+            neighbours.forEach { neighbour ->
+                if (!neighbour.isMine && neighbour.state != CellState.SAFE) {
                     exploreCellsRevised(cell)
                 }
             }
