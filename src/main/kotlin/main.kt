@@ -1,3 +1,4 @@
 fun main() {
-    MineSweeper()
+    val game = MineSweeper()
+    game.play()
 }
