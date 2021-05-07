@@ -33,27 +33,34 @@ class GameBoard(
         }
     }
 
-    fun exploreCellsRevised(cell: Cell) {
-        while (cell.state == CellState.EMPTY || cell.state == CellState.MARKED) {
-            val n = listOf(-1, 0, 1)
-            val x = n.map { (it + cell.xCoord).coerceIn(0, fieldSize) }.toSet()
-            val y = n.map { (it + cell.yCoord).coerceIn(0, fieldSize) }.toSet()
-            val neighbours = mutableListOf<Cell>()
-            for (i in y) {
-                for (j in x) {
-                    if (i == cell.yCoord && j == cell.xCoord) continue
-                    neighbours.add(board[i][j])
+    private fun getNeighbours(cell: Cell): List<Cell> {
+        val n = listOf(-1, 0, 1)
+        val row = n.map { (it + cell.xCoord).coerceIn(0, fieldSize - 1) }.toSet()
+        val col = n.map { (it + cell.yCoord).coerceIn(0, fieldSize - 1) }.toSet()
+        val neighbours = mutableListOf<Cell>()
+        for (x in row) {
+            for (y in col) {
+                if (x == cell.xCoord && y == cell.yCoord) continue
+                val neighbour = board[x][y]
+                if (neighbour.state == CellState.EMPTY) {
+                    neighbours.add(neighbour)
                 }
             }
-            val count = neighbours.count { it.isMine }
-            if (count > 0) {
-                cell.neighbourMines = count
-            } else {
+        }
+        return neighbours
+    }
+
+    // Should marked neighbours be explored?
+    fun exploreNeighbours(cell: Cell) {
+        if (cell.state == CellState.EMPTY || cell.state == CellState.MARKED) {
+            val neighbours = getNeighbours(cell)
+            cell.neighbourMines = neighbours.count { it.isMine }
+            if (!cell.isMine) {
                 cell.state = CellState.SAFE
             }
             neighbours.forEach { neighbour ->
                 if (!neighbour.isMine && neighbour.state != CellState.SAFE) {
-                    exploreCellsRevised(cell)
+                    exploreNeighbours(neighbour)
                 }
             }
         }

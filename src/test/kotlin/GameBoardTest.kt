@@ -113,4 +113,77 @@ internal class GameBoardTest {
         assertFalse(board.checkMinesMarked())
         assertFalse(board.checkRemainingCells())
     }
+
+    @Test
+    fun testExploreNeighbours_oneMine() {
+        val board = GameBoard(3, 1)
+        for (i in 0 until 3) {
+            for (j in 0 until 3) {
+                board.getCell(i, j).apply {
+                    this.isMine = i == 1 && j == i
+                }
+            }
+        }
+        board.exploreNeighbours(board.getCell(1, 1))
+        val expected = " |123|\n" +
+                "-|---|\n" +
+                "1|///|\n" +
+                "2|///|\n" +
+                "3|///|\n" +
+                "-|---|"
+        assertEquals(expected, board.drawGameBoard())
+    }
+
+    @Test
+    fun testExploreNeighbours_allMines() {
+        val board = GameBoard(3, 9)
+        board.exploreNeighbours(board.getCell(1, 1))
+        val expected = " |123|\n" +
+                "-|---|\n" +
+                "1|   |\n" +
+                "2|   |\n" +
+                "3|   |\n" +
+                "-|---|"
+        assertEquals(expected, board.drawGameBoard())
+    }
+
+    @Test
+    fun testExploreNeighbours_allMinesExceptOne() {
+        val board = GameBoard(3, 9)
+        val emptyCell = board.getCell(1, 1).apply {
+            this.isMine = false
+        }
+        board.exploreNeighbours(emptyCell)
+        val expected = " |123|\n" +
+                "-|---|\n" +
+                "1|   |\n" +
+                "2| 8 |\n" +
+                "3|   |\n" +
+                "-|---|"
+        assertEquals(expected, board.drawGameBoard())
+    }
+
+    @Test
+    fun testExploreNeighbours_twoMines() {
+        val board = GameBoard(3, 2)
+        board.exploreNeighbours(board.getCell(1, 1))
+        board.showAllMines()
+        println(board.drawGameBoard())
+    }
+
+    @Test
+    fun testExploreNeighbours_largeBoard_fewMines() {
+        val board = GameBoard(9, 1)
+        board.exploreNeighbours(board.getCell(2, 2))
+        board.showAllMines()
+        println(board.drawGameBoard())
+    }
+
+    @Test
+    fun testExploreNeighbours_largeBoard_manyMines() {
+        val board = GameBoard(9, 50)
+        board.exploreNeighbours(board.getCell(2, 2))
+        board.showAllMines()
+        println(board.drawGameBoard())
+    }
 }

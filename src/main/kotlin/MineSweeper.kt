@@ -71,37 +71,6 @@ class MineSweeper {
         } while (true)
     }
 
-//    private fun countNeighbourMines(row: Int, col: Int): Int {
-//        val n = listOf(-1, 0, 1)
-//        val x = n.map { it + col }
-//        val y = n.map { it + row }
-//        val neighbours = mutableListOf<Pair<Int, Int>>()
-//        for (i in y) {
-//            for (j in x) {
-//                if (i == row && j == col) continue
-//                neighbours.add(Pair(i, j))
-//            }
-//        }
-//        return neighbours.count { it in minePositions }
-//    }
-
-// Note that 2 uncommented methods were not generating counts/hints for the occasional diagonal cell, leaving empty
-
-//    private fun exploreCells(row: Int, col: Int) {
-//        while (playingField[row][col] == CellState.EMPTY.mark || playingField[row][col] == CellState.MARKED.mark) {
-//            if (Pair(row, col) in minePositions) {
-//                break
-//            } else {
-//                val nearbyMines = countNeighbourMines(row, col)
-//                playingField[row][col] = if (nearbyMines > 0) nearbyMines.toString() else CellState.SAFE.mark
-//                val newRow = (row + 1) % fieldSize
-//                val newCol = (col + 1) % fieldSize
-//                exploreCells(newRow, col)
-//                exploreCells(row, newCol)
-//            }
-//        }
-//    }
-
     private fun checkInput(cell: Cell, action: String, step: Int): Int {
         return when (action) {
             "free" -> {
@@ -112,14 +81,14 @@ class MineSweeper {
                             //minePositions.clear()
                             //generateMineField()
                         } while (cell.isMine)
-                        gameBoard.exploreCellsRevised(cell)
+                        gameBoard.exploreNeighbours(cell)
                         1
                     } else {
                         gameBoard.showAllMines()
                         -1
                     }
                 } else if (cell.state == CellState.EMPTY) {
-                    gameBoard.exploreCellsRevised(cell)
+                    gameBoard.exploreNeighbours(cell)
                     1
                 } else 0
             }

@@ -10,6 +10,6 @@ data class Cell(
         get() = isMine && (state == CellState.MARKED || state == CellState.MINE)
 
     override fun toString(): String {
-        return if (neighbourMines > 0) "$neighbourMines" else state.mark
+        return if (!isMine && neighbourMines > 0) "$neighbourMines" else state.mark
     }
 }
