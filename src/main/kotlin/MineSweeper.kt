@@ -32,7 +32,7 @@ class MineSweeper {
     }
 
     fun play() {
-        gameBoard.drawGameBoard()
+        println(gameBoard.drawGameBoard())
         var gameOver = false
         var gameWon = false
         step@ do {
@@ -40,9 +40,9 @@ class MineSweeper {
             when (checkInput(cell, action)) {
                 -1 -> {
                     gameOver = true
-                    gameBoard.drawGameBoard()
+                    println(gameBoard.drawGameBoard())
                 }
-                1 -> gameBoard.drawGameBoard()
+                1 -> println(gameBoard.drawGameBoard())
                 else -> continue@step
             }
             gameWon = gameBoard.checkMinesMarked() || gameBoard.checkRemainingCells()
