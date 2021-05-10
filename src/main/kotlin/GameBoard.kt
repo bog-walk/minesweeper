@@ -29,7 +29,7 @@ class GameBoard(
         try {
             return board[x][y]
         } catch (e: IndexOutOfBoundsException) {
-            throw IllegalArgumentException("Invalid cell coordinates")
+            throw IllegalArgumentException("Cell coordinates must be between 1 and $fieldSize inclusive.")
         }
     }
 

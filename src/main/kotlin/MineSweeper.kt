@@ -10,16 +10,16 @@ class MineSweeper {
 
     private fun getBoardStat(max: Int = 50, mines: Boolean = false): Int {
         var stat: Int
-        print(if (!mines) {
-            "How many rows do you want the field to take up? "
+        println(if (!mines) {
+            "How many rows do you want the field to take up?"
         } else {
-            "How many mines do you want on the field? "
+            "How many mines do you want on the field?"
         })
         while (true) {
             try {
                 stat = readLine()!!.toInt()
                 if (stat in 1..max) {
-                    break
+                    return stat
                 } else {
                     throw IllegalArgumentException()
                 }
@@ -29,19 +29,15 @@ class MineSweeper {
                 println("Number must be between 1 and $max inclusive.")
             }
         }
-        return stat
     }
 
     fun play() {
         gameBoard.drawGameBoard()
         var gameOver = false
         var gameWon = false
-        var gameStep = 0
         step@ do {
-            // What is the point of counting steps?
-            gameStep++
             val (cell, action) = parseMove()
-            when (checkInput(cell, action, gameStep)) {
+            when (checkInput(cell, action)) {
                 -1 -> {
                     gameOver = true
                     gameBoard.drawGameBoard()
@@ -57,22 +53,26 @@ class MineSweeper {
 
     // Creating cell using different coordinates based on drawn map, alter this in Gameboard
     private fun parseMove(): Pair<Cell, String> {
+        println("Choose a cell to mark/unkmark as a mine, or as safe.")
+        println("Please use the format: row# column# mine|safe.")
         do {
-            print("Choose a cell to claim/unmark as a mine or as safe: ")
+            // Enter input as: # # action
             val (x, y, action) = readLine()!!.trim().lowercase().split(Regex("\\s+"))
             try {
                 val cell = gameBoard.getCell(x.toInt() - 1, y.toInt() - 1)
                 if (action !in listOf("safe", "mine")) {
-                    throw IllegalArgumentException("Invalid action")
+                    throw IllegalArgumentException("Action must be mine or safe.")
                 }
                 return Pair(cell, action)
+            } catch (e: NumberFormatException) {
+                println("Cell coordinates must be between 1 and ${gameBoard.size} inclusive.")
             } catch (e: IllegalArgumentException) {
                 println(e.message)
             }
         } while (true)
     }
 
-    private fun checkInput(cell: Cell, action: String, step: Int): Int {
+    private fun checkInput(cell: Cell, action: String): Int {
         return when (action) {
             "safe" -> {
                 // Player has stepped on mine
