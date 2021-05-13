@@ -93,8 +93,9 @@ class GameBoard(
         }
     }
 
-    fun predict(cell: Cell, isMine: Boolean = true) {
-        if (isMine) {
+    // Only works for predicting as a mine or unmarking a mine
+    fun predict(cell: Cell, asMine: Boolean = true) {
+        if (asMine) {
             cell.state = CellState.MARKED
             this.predictions.add(cell)
         } else {

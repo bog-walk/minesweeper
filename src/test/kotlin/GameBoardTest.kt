@@ -75,7 +75,7 @@ internal class GameBoardTest {
         for (i in 0 until 3) {
             for (j in 0 until 3) {
                 val cell = board.getCell(i, j)
-                board.predict(cell, isMine = true)
+                board.predict(cell, true)
             }
         }
         val expected = " |123|\n" +
@@ -97,12 +97,12 @@ internal class GameBoardTest {
         for (i in 0 until 3) {
             for (j in 0 until 3) {
                 val cell = board.getCell(i, j)
-                board.predict(cell, isMine = true)
+                board.predict(cell, true)
             }
         }
-        board.predict(board.getCell(0, 0), isMine = false)
-        board.predict(board.getCell(1, 1), isMine = false)
-        board.predict(board.getCell(2, 2), isMine = false)
+        board.predict(board.getCell(0, 0), false)
+        board.predict(board.getCell(1, 1), false)
+        board.predict(board.getCell(2, 2), false)
         val expected = " |123|\n" +
                 "-|---|\n" +
                 "1| **|\n" +

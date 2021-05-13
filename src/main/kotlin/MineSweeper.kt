@@ -8,7 +8,9 @@ class MineSweeper {
         gameBoard = GameBoard(fieldSize, numOfMines)
     }
 
-    private fun getBoardStat(max: Int = 50, mines: Boolean = false): Int {
+    // MineField max 9 rows & columns, rather than trying to draw with double
+    // digit grid labels
+    private fun getBoardStat(max: Int = 9, mines: Boolean = false): Int {
         var stat: Int
         println(if (!mines) {
             "How many rows do you want the field to take up?"
@@ -79,19 +81,16 @@ class MineSweeper {
                 if (cell.isMine) {
                     gameBoard.showAllMines()
                     -1
-                } else when (cell.state) {
-                    // Player has stepped on an unexplored cell
-                    CellState.EMPTY -> {
-                        gameBoard.exploreNeighbours(cell)
-                        1
-                    }
-                    // Player wants to change prediction
-                    CellState.MARKED -> {
-                        gameBoard.predict(cell, false)
-                        1
-                    }
+                // Removed when statement & 0 option as
+                // exploreNeighbours() will not enter function block if
+                // state not Empty or Marked.
+                } else {
+                    // Player has stepped on an unexplored cell or
+                    // Player wants to change previous prediction
+                    // i.e. not just unmark but declare cell safe
                     // Player has tried to step on a cell already explored
-                    else -> 0
+                    gameBoard.exploreNeighbours(cell)
+                    1
                 }
             }
             else -> {
@@ -107,6 +106,7 @@ class MineSweeper {
                         gameBoard.predict(cell, false)
                         1
                     }
+                    // Safe cells cannot have state changed once made safe
                     else -> 0
                 }
             }
