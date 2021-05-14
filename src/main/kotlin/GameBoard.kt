@@ -1,6 +1,7 @@
 class GameBoard(
     private val fieldSize: Int,
-    private val numMines: Int
+    private val numMines: Int,
+    testMines: List<Int>
 ) {
     private val board = Array(fieldSize) { row ->
         Array(fieldSize) { col ->
@@ -10,14 +11,16 @@ class GameBoard(
     private val predictions = mutableSetOf<Cell>()
 
     init {
-        generateMineField()
+        generateMineField(testMines)
     }
 
     val size: Int
         get() = fieldSize
 
-    private fun generateMineField() {
-        val mines: List<Int> = (0 until fieldSize * fieldSize).shuffled().take(numMines)
+    private fun generateMineField(testMines: List<Int>) {
+        val mines = testMines.ifEmpty {
+            (0 until fieldSize * fieldSize).shuffled().take(numMines)
+        }
         for (i in 0 until numMines) {
             val row = mines[i] / fieldSize
             val col = mines[i] % fieldSize

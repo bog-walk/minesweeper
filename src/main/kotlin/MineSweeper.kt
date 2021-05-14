@@ -1,11 +1,11 @@
-class MineSweeper {
+class MineSweeper(testMines: List<Int> = emptyList()) {
     private val gameBoard: GameBoard
 
     init {
         val fieldSize = getBoardStat()
         // Should not be able to have every cell be a mine, right?
         val numOfMines = getBoardStat(fieldSize * fieldSize, true)
-        gameBoard = GameBoard(fieldSize, numOfMines)
+        gameBoard = GameBoard(fieldSize, numOfMines, testMines)
     }
 
     // MineField max 9 rows & columns, rather than trying to draw with double
