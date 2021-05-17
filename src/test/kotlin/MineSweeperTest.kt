@@ -15,9 +15,7 @@ internal class MineSweeperTest {
         val expected = File("src/test/resources/invalidOutputs")
             .bufferedReader()
             .readLines()
-        val regex = Regex("${System.lineSeparator()}|\\n")
-        val actual = output.toString().trim().split(regex)
-        assertEquals(expected, actual)
+        assertEquals(expected, output.getOutput())
     }
 
     @Test
@@ -32,9 +30,7 @@ internal class MineSweeperTest {
         val expected = File("src/test/resources/simpleBoard_allMines_Lose")
             .bufferedReader()
             .readLines()
-        val regex = Regex("${System.lineSeparator()}|\\n")
-        val actual = output.toString().trim().split(regex)
-        assertEquals(expected, actual)
+        assertEquals(expected, output.getOutput())
     }
 
     @Test
@@ -52,8 +48,11 @@ internal class MineSweeperTest {
         val expected = File("src/test/resources/simpleBoard_allMines_Win")
             .bufferedReader()
             .readLines()
+        assertEquals(expected, output.getOutput())
+    }
+
+    private fun ByteArrayOutputStream.getOutput(): List<String> {
         val regex = Regex("${System.lineSeparator()}|\\n")
-        val actual = output.toString().trim().split(regex)
-        assertEquals(expected, actual)
+        return this.toString().trim().split(regex)
     }
 }
