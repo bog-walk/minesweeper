@@ -3,6 +3,23 @@ import java.io.*
 import kotlin.test.assertEquals
 
 internal class MineSweeperTest {
+
+    @Test
+    fun testExceptionsThrown_allInvalidInput() {
+        val userInput = File("src/test/resources/invalidInputs").readBytes()
+        System.setIn(ByteArrayInputStream(userInput))
+        val output = ByteArrayOutputStream()
+        System.setOut(PrintStream(output))
+        val game = MineSweeper(listOf(0))
+        game.play()
+        val expected = File("src/test/resources/invalidOutputs")
+            .bufferedReader()
+            .readLines()
+        val regex = Regex("${System.lineSeparator()}|\\n")
+        val actual = output.toString().trim().split(regex)
+        assertEquals(expected, actual)
+    }
+
     @Test
     fun testPlay_loseInOneMove() {
         val userInput = "3${System.lineSeparator()}"+
@@ -15,7 +32,8 @@ internal class MineSweeperTest {
         val expected = File("src/test/resources/simpleBoard_allMines_Lose")
             .bufferedReader()
             .readLines()
-        val actual = output.toString().trim().split(System.lineSeparator())
+        val regex = Regex("${System.lineSeparator()}|\\n")
+        val actual = output.toString().trim().split(regex)
         assertEquals(expected, actual)
     }
 
@@ -34,7 +52,8 @@ internal class MineSweeperTest {
         val expected = File("src/test/resources/simpleBoard_allMines_Win")
             .bufferedReader()
             .readLines()
-        val actual = output.toString().trim().split(System.lineSeparator())
+        val regex = Regex("${System.lineSeparator()}|\\n")
+        val actual = output.toString().trim().split(regex)
         assertEquals(expected, actual)
     }
 }

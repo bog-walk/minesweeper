@@ -11,7 +11,6 @@ class MineSweeper(testMines: List<Int> = emptyList()) {
     // MineField max 9 rows & columns, rather than trying to draw with double
     // digit grid labels
     private fun getBoardStat(max: Int = 9, mines: Boolean = false): Int {
-        var stat: Int
         println(if (!mines) {
             "How many rows do you want the field to take up?"
         } else {
@@ -19,7 +18,7 @@ class MineSweeper(testMines: List<Int> = emptyList()) {
         })
         while (true) {
             try {
-                stat = readLine()!!.toInt()
+                val stat = readLine()!!.toInt()
                 if (stat in 1..max) {
                     return stat
                 } else {
@@ -58,16 +57,18 @@ class MineSweeper(testMines: List<Int> = emptyList()) {
         println("Choose a cell to mark/unkmark as a mine, or as safe.")
         println("Please use the format: row# column# mine|safe.")
         do {
-            // Enter input as: # # action
-            val (x, y, action) = readLine()!!.trim().lowercase().split(Regex("\\s+"))
             try {
+                // Enter input as: # # action
+                val (x, y, action) = readLine()!!.trim().lowercase().split(Regex("\\s+"))
                 val cell = gameBoard.getCell(x.toInt() - 1, y.toInt() - 1)
                 if (action !in listOf("safe", "mine")) {
                     throw IllegalArgumentException("Action must be mine or safe.")
                 }
                 return Pair(cell, action)
+            } catch (e: IndexOutOfBoundsException) {
+                println("Please use the format: row# column# mine|safe.")
             } catch (e: NumberFormatException) {
-                println("Cell coordinates must be between 1 and ${gameBoard.size} inclusive.")
+                println("Please enter a number between 1 and ${gameBoard.size} inclusive.")
             } catch (e: IllegalArgumentException) {
                 println(e.message)
             }

@@ -108,15 +108,16 @@ class GameBoard(
     }
 
     fun drawGameBoard(): String {
-        var output = " |${(1..fieldSize).joinToString("")}|\n" +
-                "-|${"-".repeat(fieldSize)}|\n"
+        val output = StringBuilder().append(" |${(1..fieldSize).joinToString("")}|\n")
+        output.append("-|${"-".repeat(fieldSize)}|\n")
         for (i in 0 until fieldSize) {
-            output += "${i + 1}|"
+            output.append("${i + 1}|")
             for (j in 0 until fieldSize) {
-                output += board[i][j]
+                output.append(board[i][j])
             }
-            output += "|\n"
+            output.append("|\n")
         }
-        return output + "-|${"-".repeat(fieldSize)}|"
+        output.append("-|${"-".repeat(fieldSize)}|")
+        return output.toString()
     }
 }

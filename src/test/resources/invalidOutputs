@@ -1,0 +1,29 @@
+How many rows do you want the field to take up?
+Please enter a number.
+Number must be between 1 and 9 inclusive.
+How many mines do you want on the field?
+Please enter a number.
+Number must be between 1 and 25 inclusive.
+ |12345|
+-|-----|
+1|     |
+2|     |
+3|     |
+4|     |
+5|     |
+-|-----|
+Choose a cell to mark/unkmark as a mine, or as safe.
+Please use the format: row# column# mine|safe.
+Please use the format: row# column# mine|safe.
+Please enter a number between 1 and 5 inclusive.
+Cell coordinates must be between 1 and 5 inclusive.
+Action must be mine or safe.
+ |12345|
+-|-----|
+1|X    |
+2|     |
+3|     |
+4|     |
+5|     |
+-|-----|
+You stepped on a mine and failed!
