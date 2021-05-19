@@ -61,19 +61,24 @@ class MineSweeper(testMines: List<Int> = emptyList()) {
                 // Enter input as: # # action
                 val (x, y, action) = readLine()!!.trim().lowercase().split(Regex("\\s+"))
                 val cell = gameBoard.getCell(x.toInt() - 1, y.toInt() - 1)
-                if (action !in listOf("safe", "mine")) {
+                if (!isValidAction(action)) {
                     throw IllegalArgumentException("Action must be mine or safe.")
                 }
                 return Pair(cell, action)
+            // Thrown if input line cannot be destructured into 3 parts
+            // getCell() will also throw this, but how to differentiate?
             } catch (e: IndexOutOfBoundsException) {
                 println("Please use the format: row# column# mine|safe.")
             } catch (e: NumberFormatException) {
                 println("Please enter a number between 1 and ${gameBoard.size} inclusive.")
+            // Also thrown by getCell() if IOOBExc caught internally
             } catch (e: IllegalArgumentException) {
                 println(e.message)
             }
         } while (true)
     }
+
+    private fun isValidAction(action: String): Boolean = action in listOf("safe", "mine")
 
     private fun checkInput(cell: Cell, action: String): Int {
         return when (action) {

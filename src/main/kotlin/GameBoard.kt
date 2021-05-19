@@ -1,3 +1,5 @@
+import kotlin.jvm.Throws
+
 class GameBoard(
     private val fieldSize: Int,
     private val numMines: Int,
@@ -28,6 +30,7 @@ class GameBoard(
         }
     }
 
+    @Throws(IllegalArgumentException::class)
     fun getCell(x: Int, y: Int): Cell {
         try {
             return board[x][y]
