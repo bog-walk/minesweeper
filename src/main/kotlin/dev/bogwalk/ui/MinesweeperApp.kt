@@ -15,6 +15,5 @@ fun MinesweeperApp() {
 @Composable
 private fun MinesweeperAppPreview() {
     MinesweeperTheme {
-        MinesweeperApp()
-    }
+        MinesweeperApp()    }
 }

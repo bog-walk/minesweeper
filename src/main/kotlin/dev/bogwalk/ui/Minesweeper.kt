@@ -1,5 +1,5 @@
 package dev.bogwalk.ui
-
+/*
 import dev.bogwalk.model.Cell
 import dev.bogwalk.model.CellState
 import dev.bogwalk.model.GameBoard
@@ -124,4 +124,4 @@ class MineSweeper(testMines: List<Int> = emptyList()) {
             }
         }
     }
-}
+}*/
