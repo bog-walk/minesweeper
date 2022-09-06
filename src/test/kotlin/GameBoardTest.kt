@@ -1,3 +1,4 @@
+import dev.bogwalk.model.GameBoard
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*

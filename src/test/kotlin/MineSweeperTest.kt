@@ -1,3 +1,4 @@
+import dev.bogwalk.ui.MineSweeper
 import org.junit.jupiter.api.Test
 import java.io.*
 import kotlin.test.assertEquals
