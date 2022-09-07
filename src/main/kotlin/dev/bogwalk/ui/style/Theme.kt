@@ -11,10 +11,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-private val MinesweeperBlue = Color(0xff9ab8ef)
-private val MinesweeperGreen = Color(0xffd4fa81)
-private val MinesweeperRed = Color(0xfffca5a5)
-private val MinesweeperYellow = Color(0xffffc400)
+private val MinesweeperBlue = Color.Blue
+private val MinesweeperGreen = Color.Green
+private val MinesweeperRed = Color.Red
+private val MinesweeperYellow = Color.Yellow
+
+object NumberColors {
+    val colors = listOf(MinesweeperRed, MinesweeperBlue, MinesweeperGreen)
+}
 
 val MinesweeperColors = darkColors(
     primary = MinesweeperBlue,
