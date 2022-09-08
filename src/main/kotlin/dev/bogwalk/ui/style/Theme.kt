@@ -1,6 +1,5 @@
 package dev.bogwalk.ui.style
 
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -8,30 +7,31 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-private val MinesweeperBlue = Color.Blue
-private val MinesweeperGreen = Color.Green
-private val MinesweeperRed = Color.Red
-private val MinesweeperYellow = Color.Yellow
+// colors
+private val MinesweeperBlue = Color(0xff80b5ff)
+private val MinesweeperGreen = Color(0xff80ff80)
+private val MinesweeperRed = Color(0xffff9580)
+private val MinesweeperYellow = Color(0xffffff80)
+// greyscale
+private val VeryLightGray = Color(0xffbdbdbd)
+private val LighterGray = Color(0xff757575)
+private val Gray = Color(0xff424242)
+private val DarkerGray = Color(0xff212121)
 
 object NumberColors {
     val colors = listOf(MinesweeperRed, MinesweeperBlue, MinesweeperGreen)
 }
 
 val MinesweeperColors = darkColors(
-    primary = MinesweeperBlue,
-    secondary = MinesweeperGreen,
-    secondaryVariant = MinesweeperYellow,
-    background = Color.DarkGray,
-    surface = Color.DarkGray,
-    error = MinesweeperRed,
-    onPrimary = Color.DarkGray,
-    onSecondary = Color.White,
-    onBackground = Color.White,
-    onSurface = Color.White,
-    onError = Color.Gray
+    primary = Gray,
+    secondary = LighterGray,
+    secondaryVariant = VeryLightGray,
+    background = Gray,
+    surface = Color.White,
+    error = Color(0xff5d0909),
+    onPrimary = DarkerGray
 )
 
 private val MinesweeperTypography = Typography(
@@ -55,19 +55,13 @@ private val MinesweeperTypography = Typography(
     )
 )
 
-private val MinesweeperShapes = Shapes(
-    small = RoundedCornerShape(50),
-    medium = RoundedCornerShape(4.dp)
-)
-
 @Composable
 fun MinesweeperTheme(
     content: @Composable () -> Unit
 ) {
     MaterialTheme(
         colors = MinesweeperColors,
-        typography = MinesweeperTypography,
-        shapes = MinesweeperShapes
+        typography = MinesweeperTypography
     ) {
         Surface(content = content)
     }

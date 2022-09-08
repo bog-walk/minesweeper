@@ -13,16 +13,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.ContentDrawScope
 import androidx.compose.ui.input.pointer.isPrimaryPressed
 import androidx.compose.ui.input.pointer.isSecondaryPressed
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.style.TextAlign
 import dev.bogwalk.model.Cell
 import dev.bogwalk.model.CellState
 import dev.bogwalk.model.GameState
-import dev.bogwalk.ui.drawEdge
+import dev.bogwalk.ui.drawBevelEdge
 import dev.bogwalk.ui.style.*
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -49,19 +49,28 @@ fun MSCell(
                 }
             )
             .background(
-                color = if (gameState == GameState.LOST && cell.isMine && cell.state == CellState.SELECTED)
-                    Color.Red else Color.LightGray
+                color = if (gameState == GameState.LOST && cell.isMine) {
+                    when (cell.state) {
+                        CellState.SELECTED -> MinesweeperColors.error
+                        else -> MinesweeperColors.primary
+                    }
+                } else {
+                    when (cell.state) {
+                        CellState.SELECTED -> MinesweeperColors.primary
+                        else -> MinesweeperColors.secondary
+                    }
+                }
             )
             .drawWithCache {
               onDrawWithContent {
                   drawContent()
                   if (cell.state == CellState.SELECTED || gameState == GameState.LOST && cell.isMine) {
-                      drawLine(Color.Gray, Offset.Zero, Offset(size.width, 0F))
-                      drawLine(Color.Gray, Offset.Zero, Offset(0F, size.height))
-                      drawLine(Color.Gray, Offset(size.width, 0F), Offset(size.width, size.height))
-                      drawLine(Color.Gray, Offset(0F, size.height), Offset(size.width, size.height))
+                      drawLine(MinesweeperColors.onPrimary, Offset.Zero, Offset(size.width, 0F))
+                      drawLine(MinesweeperColors.onPrimary, Offset.Zero, Offset(0F, size.height))
+                      drawLine(MinesweeperColors.onPrimary, Offset(size.width, 0F), Offset(size.width, size.height))
+                      drawLine(MinesweeperColors.onPrimary, Offset(0F, size.height), Offset(size.width, size.height))
                   } else {
-                      drawEdge(ELEVATION)
+                      drawBevelEdge(BEVEL_STROKE)
                   }
               }
             },
@@ -73,14 +82,14 @@ fun MSCell(
                     Icon(
                         painter = painterResource(MINE_ICON),
                         contentDescription = MINE_DESCRIPTION,
-                        modifier = Modifier.matchParentSize()
+                        modifier = Modifier.padding(tinyPadding).matchParentSize()
                     )
                 }
                 if (gameState == GameState.WON && cell.isMine) {
                     Icon(
                         painter = painterResource(FLAG_ICON),
                         contentDescription = FLAG_DESCRIPTION,
-                        modifier = Modifier.matchParentSize(),
+                        modifier = Modifier.padding(tinyPadding).matchParentSize(),
                         tint = Color.Red
                     )
                 }
@@ -89,15 +98,15 @@ fun MSCell(
                 Icon(
                     painter = painterResource(FLAG_ICON),
                     contentDescription = FLAG_DESCRIPTION,
-                    modifier = Modifier.matchParentSize(),
+                    modifier = Modifier.padding(tinyPadding).matchParentSize(),
                     tint = Color.Red
                 )
                 if (gameState == GameState.LOST && !cell.isMine) {
                     Icon(
                         painter = painterResource(MINE_ICON),
                         contentDescription = MINE_DESCRIPTION,
-                        modifier = Modifier.matchParentSize(),
-                        tint = Color.Black
+                        modifier = Modifier.padding(tinyPadding).matchParentSize(),
+                        tint = Color.White
                     )
                 }
             }
@@ -107,13 +116,14 @@ fun MSCell(
                         painter = painterResource(MINE_ICON),
                         contentDescription = MINE_DESCRIPTION,
                         modifier = Modifier.matchParentSize(),
-                        tint = Color.Black
+                        tint = Color.White
                     )
                     0 -> {}
                     else -> Text(
                         text = cell.neighbourMines.toString(),
-                        modifier = Modifier.wrapContentSize(Alignment.Center),
-                        color = NumberColors.colors[cell.neighbourMines % 3]
+                        modifier = Modifier.wrapContentSize(Alignment.Center, true),
+                        color = NumberColors.colors[cell.neighbourMines % 3],
+                        textAlign = TextAlign.Center
                     )
                 }
             }

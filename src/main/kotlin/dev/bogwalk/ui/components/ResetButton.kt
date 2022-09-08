@@ -12,12 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import dev.bogwalk.model.GameState
-import dev.bogwalk.ui.drawEdge
+import dev.bogwalk.ui.drawBevelEdge
 import dev.bogwalk.ui.style.*
 
 @Composable
@@ -34,11 +33,11 @@ fun ResetButton(
                 role = Role.Button,
                 onClick = { onResetRequest() }
             )
-            .background(color = Color.LightGray)
+            .background(color = MinesweeperColors.primary)
             .drawWithCache {
                 onDrawWithContent {
                     drawContent()
-                    drawEdge(ELEVATION)
+                    drawBevelEdge(BEVEL_STROKE)
                 }
             },
         contentAlignment = Alignment.Center
@@ -54,8 +53,8 @@ fun ResetButton(
                 GameState.WON -> RESET_WON_DESCRIPTION
                 GameState.LOST -> RESET_LOST_DESCRIPTION
             },
-            modifier = Modifier.padding(cellPadding).matchParentSize(),
-            tint = Color.Black
+            modifier = Modifier.matchParentSize().padding(tinyPadding),
+            tint = Color.White
         )
     }
 }

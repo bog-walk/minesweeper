@@ -21,8 +21,10 @@ fun DigitalScreen(
     var pow = 100
 
     Row(
-        modifier = Modifier.padding(smallPadding),
-        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .padding(smallPadding)
+            .background(MinesweeperColors.onPrimary),
+        horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
     ) {
         repeat(3) {
@@ -44,9 +46,9 @@ private fun SegmentDigit(
     segment: DigitSegment
 ) {
     Canvas(
-        Modifier.padding(horizontal = cellPadding)
+        Modifier
+            .padding(tinyPadding / 2)
             .requiredSize(digitWidth, headerHeight)
-            .background(Color.DarkGray)
     ) {
         val canvasWidth = size.width
         val canvasHeight = size.height

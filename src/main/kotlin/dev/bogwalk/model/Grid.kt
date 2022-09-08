@@ -7,7 +7,7 @@ abstract class Grid(
 ) {
     var flagsRemaining = numOfMines
     var allMinesFound = false
-    protected val board = Array(numOfRows) { row ->
+    val board = Array(numOfRows) { row ->
         Array(numOfCols) { col ->
             Cell(row to col)
         }
