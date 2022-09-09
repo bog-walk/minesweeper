@@ -28,10 +28,10 @@ import dev.bogwalk.ui.style.*
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MSCell(
-    cell: Cell,
     gameState: GameState,
-    onSelectCell: (Cell) -> Unit,
-    onFlagCell: (Cell) -> Unit
+    cell: Cell,
+    onSelectCell: (Pair<Int, Int>) -> Unit,
+    onFlagCell: (Pair<Int, Int>) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -39,12 +39,12 @@ fun MSCell(
             .requiredSize(cellSize)
             .mouseClickable(
                 enabled = gameState == GameState.PLAYING && cell.state != CellState.SELECTED,
-                onClickLabel = null,
+                onClickLabel = "(${cell.coordinates.first},${cell.coordinates.second})",
                 role = Role.Button,
                 onClick = {
                     when {
-                        buttons.isPrimaryPressed -> onSelectCell(cell)
-                        buttons.isSecondaryPressed -> onFlagCell(cell)
+                        buttons.isPrimaryPressed -> onSelectCell(cell.coordinates)
+                        buttons.isSecondaryPressed -> onFlagCell(cell.coordinates)
                     }
                 }
             )
@@ -62,17 +62,16 @@ fun MSCell(
                 }
             )
             .drawWithCache {
-              onDrawWithContent {
-                  drawContent()
-                  if (cell.state == CellState.SELECTED || gameState == GameState.LOST && cell.isMine) {
-                      drawLine(MinesweeperColors.onPrimary, Offset.Zero, Offset(size.width, 0F))
-                      drawLine(MinesweeperColors.onPrimary, Offset.Zero, Offset(0F, size.height))
-                      drawLine(MinesweeperColors.onPrimary, Offset(size.width, 0F), Offset(size.width, size.height))
-                      drawLine(MinesweeperColors.onPrimary, Offset(0F, size.height), Offset(size.width, size.height))
-                  } else {
-                      drawBevelEdge(BEVEL_STROKE)
-                  }
-              }
+                onDrawBehind {
+                    if (cell.state == CellState.SELECTED || (gameState == GameState.LOST && cell.isMine)) {
+                        drawLine(MinesweeperColors.onPrimary, Offset.Zero, Offset(size.width, 0F))
+                        drawLine(MinesweeperColors.onPrimary, Offset.Zero, Offset(0F, size.height))
+                        drawLine(MinesweeperColors.onPrimary, Offset(size.width, 0F), Offset(size.width, size.height))
+                        drawLine(MinesweeperColors.onPrimary, Offset(0F, size.height), Offset(size.width, size.height))
+                    } else {
+                        drawBevelEdge(BEVEL_STROKE)
+                    }
+                }
             },
         contentAlignment = Alignment.Center
     ) {
@@ -94,22 +93,6 @@ fun MSCell(
                     )
                 }
             }
-            CellState.FLAGGED -> {
-                Icon(
-                    painter = painterResource(FLAG_ICON),
-                    contentDescription = FLAG_DESCRIPTION,
-                    modifier = Modifier.padding(tinyPadding).matchParentSize(),
-                    tint = Color.Red
-                )
-                if (gameState == GameState.LOST && !cell.isMine) {
-                    Icon(
-                        painter = painterResource(MINE_ICON),
-                        contentDescription = MINE_DESCRIPTION,
-                        modifier = Modifier.padding(tinyPadding).matchParentSize(),
-                        tint = Color.White
-                    )
-                }
-            }
             CellState.SELECTED -> {
                 when (cell.neighbourMines) {
                     -1 -> Icon(
@@ -127,9 +110,26 @@ fun MSCell(
                     )
                 }
             }
+            CellState.FLAGGED -> {
+                if (gameState == GameState.LOST && !cell.isMine) {
+                    Icon(
+                        painter = painterResource(MINE_ICON),
+                        contentDescription = MINE_DESCRIPTION,
+                        modifier = Modifier.padding(tinyPadding).matchParentSize(),
+                        tint = Color.White
+                    )
+                } else {
+                    Icon(
+                        painter = painterResource(FLAG_ICON),
+                        contentDescription = FLAG_DESCRIPTION,
+                        modifier = Modifier.padding(tinyPadding).matchParentSize(),
+                        tint = Color.Red
+                    )
+                }
+            }
         }
     }
-}
+}    
 
 @Preview
 @Composable
@@ -141,31 +141,31 @@ private fun MSCellPreview() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // initial default enabled
-            MSCell(Cell(0 to 0), GameState.PLAYING, {}, {})
+            MSCell(GameState.PLAYING, Cell(0 to 0), {}, {})
             // disabled empty never clicked
-            MSCell(Cell(0 to 0), GameState.WON, {}, {})
+            MSCell(GameState.WON, Cell(0 to 0), {}, {})
             // empty clicked
-            MSCell(Cell(0 to 0, state = CellState.SELECTED), GameState.PLAYING, {}, {})
+            MSCell(GameState.PLAYING, Cell(0 to 0, state = CellState.SELECTED), {}, {})
             // non-empty clicked
-            MSCell(Cell(0 to 0, neighbourMines = 1, state = CellState.SELECTED), GameState.PLAYING, {}, {})
+            MSCell(GameState.PLAYING, Cell(0 to 0, neighbourMines = 1, state = CellState.SELECTED), {}, {})
             // non-empty clicked
-            MSCell(Cell(0 to 0, neighbourMines = 2, state = CellState.SELECTED), GameState.PLAYING, {}, {})
+            MSCell(GameState.PLAYING, Cell(0 to 0, neighbourMines = 2, state = CellState.SELECTED), {}, {})
             // non-empty clicked
-            MSCell(Cell(0 to 0, neighbourMines = 3, state = CellState.SELECTED), GameState.PLAYING, {}, {})
+            MSCell(GameState.PLAYING, Cell(0 to 0, neighbourMines = 3, state = CellState.SELECTED), {}, {})
             // non-empty clicked
-            MSCell(Cell(0 to 0, neighbourMines = 4, state = CellState.SELECTED), GameState.PLAYING, {}, {})
+            MSCell(GameState.PLAYING, Cell(0 to 0, neighbourMines = 4, state = CellState.SELECTED), {}, {})
             // non-empty clicked
-            MSCell(Cell(0 to 0, neighbourMines = 5, state = CellState.SELECTED), GameState.PLAYING, {}, {})
+            MSCell(GameState.PLAYING, Cell(0 to 0, neighbourMines = 5, state = CellState.SELECTED), {}, {})
             // flagged
-            MSCell(Cell(0 to 0, state = CellState.FLAGGED), GameState.PLAYING, {}, {})
+            MSCell(GameState.PLAYING, Cell(0 to 0, state = CellState.FLAGGED), {}, {})
             // clicked mine
-            MSCell(Cell(0 to 0, isMine = true, neighbourMines = -1, state = CellState.SELECTED), GameState.LOST, {}, {})
+            MSCell(GameState.LOST, Cell(0 to 0, neighbourMines = -1, state = CellState.SELECTED), {}, {})
             // disabled mine not clicked game lost
-            MSCell(Cell(0 to 0, isMine = true, neighbourMines = -1, state = CellState.UNSELECTED), GameState.LOST, {}, {})
+            MSCell(GameState.LOST, Cell(0 to 0, neighbourMines = -1, state = CellState.UNSELECTED), {}, {})
             // disabled mine not clicked / flagged game won
-            MSCell(Cell(0 to 0, isMine = true, neighbourMines = -1, state = CellState.UNSELECTED), GameState.WON, {}, {})
+            MSCell(GameState.WON, Cell(0 to 0, neighbourMines = -1, state = CellState.UNSELECTED), {}, {})
             // flagged but not a mine when game lost
-            MSCell(Cell(0 to 0, state = CellState.FLAGGED), GameState.LOST, {}, {})
+            MSCell(GameState.LOST, Cell(0 to 0, state = CellState.FLAGGED), {}, {})
         }
     }
 }

@@ -22,7 +22,7 @@ fun DigitalScreen(
 
     Row(
         modifier = Modifier
-            .padding(smallPadding)
+            //.padding(smallPadding)
             .background(MinesweeperColors.onPrimary),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically

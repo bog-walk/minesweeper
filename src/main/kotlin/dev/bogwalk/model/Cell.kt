@@ -1,11 +1,16 @@
 package dev.bogwalk.model
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class Cell(
     val coordinates: Pair<Int, Int>,
-    val isMine: Boolean = false,
-    var neighbourMines: Int = 0,
-    var state: CellState = CellState.UNSELECTED
+    val state: CellState = CellState.UNSELECTED,
+    val neighbourMines: Int = 0
 ) {
+    val isMine: Boolean
+        get() = neighbourMines == -1
+
     override fun toString(): String {
         return when (state) {
             CellState.UNSELECTED -> " "

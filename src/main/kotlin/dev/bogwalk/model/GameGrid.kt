@@ -1,9 +1,9 @@
 package dev.bogwalk.model
 
 class GameGrid(
-    private val numOfRows: Int = 16,
-    private val numOfCols: Int = 16,
-    private val numOfMines: Int = 40
+    numOfRows: Int = 9,
+    numOfCols: Int = 9,
+    numOfMines: Int = 10
 ) : Grid(numOfRows, numOfCols, numOfMines) {
     init {
         generateMineField()
@@ -14,8 +14,8 @@ class GameGrid(
         for (position in mines) {
             val row = position / numOfCols
             val col = position % numOfCols
-            board[row][col] = board[row][col].copy(isMine = true, neighbourMines = -1)
-            generateNeighbourCount(board[row][col])
+            board[row][col] = board[row][col].copy(neighbourMines = -1)
+            generateNeighbourCount(row to col)
         }
     }
 }

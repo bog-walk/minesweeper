@@ -2,14 +2,16 @@ package dev.bogwalk.model
 
 class TestGrid(
     private val mines: List<Pair<Int, Int>>,
-    private val numOfRows: Int = 5,
-    private val numOfCols: Int = 5
+    numOfRows: Int = 5,
+    numOfCols: Int = 5
 ) : Grid(numOfRows, numOfCols, mines.size) {
     init {
+        println("Inside init")
         generateMineField()
     }
 
     override fun generateMineField() {
+        println("In generateMineField()")
         for ((row, col) in mines) {
             board[row][col] = board[row][col].copy(isMine = true, neighbourMines = -1)
             generateNeighbourCount(board[row][col])

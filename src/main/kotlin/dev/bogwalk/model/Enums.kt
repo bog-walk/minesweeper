@@ -1,7 +1,7 @@
 package dev.bogwalk.model
 
 enum class CellState {
-    UNSELECTED, FLAGGED, SELECTED
+    UNSELECTED, SELECTED, FLAGGED
 }
 
 enum class GameState {

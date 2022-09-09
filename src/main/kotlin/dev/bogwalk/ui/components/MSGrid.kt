@@ -2,10 +2,7 @@ package dev.bogwalk.ui.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
@@ -22,15 +19,17 @@ import dev.bogwalk.ui.style.windowPadding
 
 @Composable
 fun MSGrid(
-    board: Array<Array<Cell>>,
+    numOfRows: Int,
+    numOfColumns: Int,
+    board: List<Cell>,
     gameState: GameState,
-    onSelectCell: (Cell) -> Unit,
-    onFlagCell: (Cell) -> Unit
+    onSelectCell: (Pair<Int, Int>) -> Unit,
+    onFlagCell: (Pair<Int, Int>) -> Unit
 ) {
     Column(
         modifier = Modifier
             .background(color = MinesweeperColors.primary)
-            .padding(windowPadding)
+            .padding(start = windowPadding, end = windowPadding, bottom = windowPadding)
             .drawWithCache {
                 onDrawWithContent {
                     drawContent()
@@ -40,16 +39,14 @@ fun MSGrid(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        for ((i, row) in board.withIndex()) {
-            key("Row $i") {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    for ((j, cell) in row.withIndex()) {
-                        key("Cell $i $j") {
-                            MSCell(cell, gameState, onSelectCell, onFlagCell)
-                        }
+        repeat(numOfRows) { row ->
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                repeat(numOfColumns) { col ->
+                    key("$row,$col") {
+                        MSCell(gameState, board[row * numOfColumns + col], onSelectCell, onFlagCell)
                     }
                 }
             }
@@ -60,28 +57,28 @@ fun MSGrid(
 @Preview
 @Composable
 private fun MSGridPreview_Initial() {
-    val board = Array(9) { r -> Array(9) { c -> Cell(r to c) } }
+    val board = List(9) { r -> List(9) { c -> Cell(r to c) } }.flatten()
     MinesweeperTheme {
-        MSGrid(board, GameState.PLAYING, {}, {})
+        MSGrid(9, 9, board, GameState.PLAYING, {}, {})
     }
 }
 
 @Preview
 @Composable
 private fun MSGridPreview_AllEmpty() {
-    val board = Array(9) { r -> Array(9) { c -> Cell(r to c, state = CellState.SELECTED) } }
+    val board = List(9) { r -> List(9) { c -> Cell(r to c, state = CellState.SELECTED) } }.flatten()
     MinesweeperTheme {
-        MSGrid(board, GameState.PLAYING, {}, {})
+        MSGrid(9, 9, board, GameState.PLAYING, {}, {})
     }
 }
 
 @Preview
 @Composable
 private fun MSGridPreview_GameWon() {
-    val board = Array(9) { r -> Array(9) { c -> Cell(r to c, state = CellState.SELECTED) } }
+    val board = List(9) { r -> MutableList(9) { c -> Cell(r to c, state = CellState.SELECTED) } }
 
     for ((r, c) in listOf(0 to 3, 3 to 0, 3 to 1, 3 to 2, 6 to 8)) {
-        board[r][c] = board[r][c].copy(isMine = true, neighbourMines = -1, state = CellState.FLAGGED)
+        board[r][c] = board[r][c].copy(neighbourMines = -1, state = CellState.FLAGGED)
     }
     for ((r, c) in listOf(
         0 to 2, 0 to 4, 1 to 2, 1 to 3, 1 to 4, 2 to 3, 3 to 3, 4 to 3, 5 to 7, 5 to 8, 6 to 7, 7 to 7, 7 to 8)
@@ -96,7 +93,6 @@ private fun MSGridPreview_GameWon() {
     }
 
     MinesweeperTheme {
-        MSGrid(board, GameState.WON, {}, {})
+        MSGrid(9, 9, board.flatten(), GameState.WON, {}, {})
     }
 }
-
