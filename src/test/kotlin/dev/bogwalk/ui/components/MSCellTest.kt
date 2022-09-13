@@ -1,4 +1,4 @@
-package dev.bogwalk.ui
+package dev.bogwalk.ui.components
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.*
@@ -6,7 +6,6 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import dev.bogwalk.model.Cell
 import dev.bogwalk.model.CellState
 import dev.bogwalk.model.GameState
-import dev.bogwalk.ui.components.MSCell
 import dev.bogwalk.ui.style.FLAG_DESCRIPTION
 import dev.bogwalk.ui.style.MINE_DESCRIPTION
 import org.junit.Rule
@@ -21,7 +20,7 @@ internal class MSCellTest {
         val state = mutableStateOf(GameState.PLAYING)
 
         composeTestRule.setContent {
-            MSCell(Cell(0 to 0), state.value, {}, {})
+            MSCell(state.value, Cell(0 to 0), {}, {})
         }
 
         composeTestRule
@@ -42,7 +41,7 @@ internal class MSCellTest {
     fun `empty MSCell before and after clicking`() {
         val state = mutableStateOf(CellState.UNSELECTED)
         composeTestRule.setContent {
-            MSCell(Cell(0 to 0, state = state.value), GameState.PLAYING, {}, {})
+            MSCell(GameState.PLAYING, Cell(0 to 0, state = state.value), {}, {})
         }
 
         composeTestRule
@@ -63,8 +62,8 @@ internal class MSCellTest {
     fun `MSCell with nearby mines before and after clicking`() {
         val state = mutableStateOf(CellState.UNSELECTED)
         composeTestRule.setContent {
-            MSCell(Cell(0 to 0, neighbourMines = 3, state = state.value),
-                GameState.PLAYING, {}, {})
+            MSCell(GameState.PLAYING,
+                Cell(0 to 0, neighbourMines = 3, state = state.value), {}, {})
         }
 
         composeTestRule
@@ -86,8 +85,8 @@ internal class MSCellTest {
     fun `MSCell before and after flagging`() {
         val state = mutableStateOf(CellState.UNSELECTED)
         composeTestRule.setContent {
-            MSCell(Cell(0 to 0, state = state.value),
-                GameState.PLAYING, {}, {})
+            MSCell(GameState.PLAYING,
+                Cell(0 to 0, state = state.value), {}, {})
         }
 
         composeTestRule
@@ -111,9 +110,8 @@ internal class MSCellTest {
     fun `MSCell with hidden mine before and after clicking`() {
         val state = mutableStateOf(CellState.UNSELECTED)
         composeTestRule.setContent {
-            MSCell(
-                Cell(0 to 0, isMine = true, neighbourMines = -1, state = state.value),
-                GameState.PLAYING, {}, {})
+            MSCell(GameState.PLAYING,
+                Cell(0 to 0, neighbourMines = -1, state = state.value), {}, {})
         }
 
         composeTestRule
@@ -137,8 +135,8 @@ internal class MSCellTest {
     fun `MSCell with hidden mine after game lost`() {
         val state = mutableStateOf(GameState.PLAYING)
         composeTestRule.setContent {
-            MSCell(Cell(0 to 0, isMine = true, neighbourMines = -1),
-                state.value, {}, {})
+            MSCell(state.value,
+                Cell(0 to 0, neighbourMines = -1), {}, {})
         }
 
         composeTestRule
@@ -162,8 +160,8 @@ internal class MSCellTest {
     fun `MSCell with hidden mine after game won`() {
         val state = mutableStateOf(GameState.PLAYING)
         composeTestRule.setContent {
-            MSCell(Cell(0 to 0, isMine = true, neighbourMines = -1),
-                state.value, {}, {})
+            MSCell(state.value,
+                Cell(0 to 0, neighbourMines = -1), {}, {})
         }
 
         composeTestRule

@@ -6,15 +6,13 @@ class TestGrid(
     numOfCols: Int = 5
 ) : Grid(numOfRows, numOfCols, mines.size) {
     init {
-        println("Inside init")
         generateMineField()
     }
 
     override fun generateMineField() {
-        println("In generateMineField()")
         for ((row, col) in mines) {
-            board[row][col] = board[row][col].copy(isMine = true, neighbourMines = -1)
-            generateNeighbourCount(board[row][col])
+            board[row][col] = board[row][col].copy(neighbourMines = -1)
+            generateNeighbourCount(row to col)
         }
     }
 

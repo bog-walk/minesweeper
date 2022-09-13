@@ -1,10 +1,9 @@
-package dev.bogwalk.ui
+package dev.bogwalk.ui.components
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import dev.bogwalk.model.Cell
 import dev.bogwalk.model.GameState
-import dev.bogwalk.ui.components.MSGrid
 import org.junit.Rule
 import kotlin.test.Test
 
@@ -16,9 +15,9 @@ internal class MSGridTest {
     fun `MSGrid initial load is correct`() {
         val rows = 9
         val columns = 9
-        val board = Array(rows) { r -> Array(columns) { c -> Cell(r to c) } }
+        val board = List(rows) { r -> List(columns) { c -> Cell(r to c) } }.flatten()
         composeTestRule.setContent {
-            MSGrid(board, GameState.PLAYING, {}, {})
+            MSGrid(rows, columns, board, GameState.PLAYING, {}, {})
         }
 
         composeTestRule

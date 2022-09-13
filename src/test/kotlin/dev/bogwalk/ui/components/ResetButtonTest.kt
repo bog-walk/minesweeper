@@ -1,4 +1,4 @@
-package dev.bogwalk.ui
+package dev.bogwalk.ui.components
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.assertIsEnabled

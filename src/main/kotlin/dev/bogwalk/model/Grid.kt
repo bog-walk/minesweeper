@@ -90,14 +90,15 @@ abstract class Grid(
                 board[coordinates.first][coordinates.second] = cell.copy(state = CellState.SELECTED)
                 unselectedCount--
                 if (cell.isMine) {
-                    //selectedAMine = true
                     false
-                } else if (unselectedCount == numOfMines) {
-                    allMinesFound = true
-                    true
                 } else {
                     if (cell.neighbourMines == 0) {
                         expandSelection(coordinates)
+                    }
+                    if (unselectedCount == numOfMines) {
+                        allMinesFound = true
+                        // all unflagged mines should be flagged & count should drop
+                        flagsRemaining = 0
                     }
                     true
                 }

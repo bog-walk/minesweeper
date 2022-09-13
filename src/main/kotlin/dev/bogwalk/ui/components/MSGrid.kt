@@ -8,14 +8,12 @@ import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.platform.testTag
 import dev.bogwalk.model.Cell
 import dev.bogwalk.model.CellState
 import dev.bogwalk.model.GameState
 import dev.bogwalk.ui.drawBevelEdge
-import dev.bogwalk.ui.style.BEVEL_STROKE
-import dev.bogwalk.ui.style.MinesweeperColors
-import dev.bogwalk.ui.style.MinesweeperTheme
-import dev.bogwalk.ui.style.windowPadding
+import dev.bogwalk.ui.style.*
 
 @Composable
 fun MSGrid(
@@ -28,6 +26,7 @@ fun MSGrid(
 ) {
     Column(
         modifier = Modifier
+            .testTag(GRID_TEST_TAG)
             .background(color = MinesweeperColors.primary)
             .padding(start = windowPadding, end = windowPadding, bottom = windowPadding)
             .drawWithCache {

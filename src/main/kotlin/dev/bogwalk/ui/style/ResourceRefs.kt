@@ -33,3 +33,7 @@ const val FLAG_ICON = "flag.svg"
 const val FLAG_DESCRIPTION = "tiny red flag"
 const val MINE_ICON = "bomb.svg"
 const val MINE_DESCRIPTION = "tiny mine"
+
+// MSGrid
+
+const val GRID_TEST_TAG = "grid column"
