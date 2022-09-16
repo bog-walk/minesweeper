@@ -13,6 +13,35 @@ val headerHeight = 30.dp
 const val BEVEL_STROKE = 2.2F
 const val ELEVATED_BEVEL = 1F
 const val SUNKEN_BEVEL = -2F
+val staticWidth = 46.dp
+val staticHeight = 157.dp
+
+// MenuBar
+const val OPTIONS_MENU = "Options"
+const val GAME_MENU = "New Game"
+const val RULES_MENU = "Rules"
+
+// NewGameDialog
+const val HEADER1 = "Height"
+const val HEADER2 = "Width"
+const val HEADER3 = "Mines"
+const val LEVEL_CUSTOM = "CUSTOM"
+const val START_GAME = "NEW GAME"
+val dialogWidth = 350.dp
+val dialogHeight = 320.dp
+
+// RulesDialog
+const val MOUSE_X_OFFSET = 8f
+const val MOUSE_Y_OFFSET = 5f
+val mouseWidth = 70.dp
+val mouseHeight = 80.dp
+const val LEFT_CLICK = "Reveal"
+const val RIGHT_CLICK = "Flag/Unflag"
+const val LEFT_CLICK_DESCRIPTION = "Left mouse click animation"
+const val RIGHT_CLICK_DESCRIPTION = "Right mouse click animation"
+const val FACE_CLICK = "Start a new game"
+const val LEFT_SCREEN = "Flags available"
+const val RIGHT_SCREEN = "Seconds passed"
 
 // ResetButton
 const val RESET_TEST_TAG = "reset button"
@@ -35,5 +64,4 @@ const val MINE_ICON = "bomb.svg"
 const val MINE_DESCRIPTION = "tiny mine"
 
 // MSGrid
-
 const val GRID_TEST_TAG = "grid column"

@@ -31,27 +31,22 @@ val MinesweeperColors = darkColors(
     background = Gray,
     surface = Color.White,
     error = Color(0xff5d0909),
-    onPrimary = DarkerGray
+    onPrimary = DarkerGray,
+    onSurface = Color.Black
 )
 
 private val MinesweeperTypography = Typography(
     defaultFontFamily = FontFamily.Monospace,
-    h4 = TextStyle(
-        fontSize = 37.sp,
-        fontWeight = FontWeight.Normal,
-        letterSpacing = 0.5.sp,
-        textAlign = TextAlign.Center,
-        lineHeight = 37.sp
-    ),
     body1 = TextStyle(
         fontSize = 15.sp,
         fontWeight = FontWeight.Bold,
-        textAlign = TextAlign.Center,
+        textAlign = TextAlign.Left
     ),
     button = TextStyle(
+        color = MinesweeperColors.onSurface,
         fontSize = 12.sp,
         fontWeight = FontWeight.SemiBold,
-        textAlign = TextAlign.Center,
+        textAlign = TextAlign.Center
     )
 )
 

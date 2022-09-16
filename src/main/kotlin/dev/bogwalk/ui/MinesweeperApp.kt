@@ -3,7 +3,6 @@ package dev.bogwalk.ui
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import dev.bogwalk.ui.components.MSGrid
@@ -12,9 +11,7 @@ import dev.bogwalk.ui.style.MinesweeperTheme
 import dev.bogwalk.ui.util.MinesweeperAppState
 
 @Composable
-fun MinesweeperApp(state: MinesweeperAppState = MinesweeperAppState()) {
-    val minesweeperState = remember { state }
-
+fun MinesweeperApp(state: MinesweeperAppState) {
     Column(
         // this modifier forces header to match dynamic width of grid
         modifier = Modifier.width(IntrinsicSize.Max),
@@ -22,19 +19,19 @@ fun MinesweeperApp(state: MinesweeperAppState = MinesweeperAppState()) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         MSHeader(
-            minesweeperState.flagsRemaining,
-            minesweeperState.timer.seconds,
-            minesweeperState.gameState,
-            minesweeperState::resetBoard
+            state.flagsRemaining,
+            state.timer.seconds,
+            state.gameState,
+            state::resetBoard
         )
         MSGrid(
-            minesweeperState.grid.numOfRows,
-            minesweeperState.grid.numOfCols,
-            minesweeperState.gameCells,
-            minesweeperState.gameState,
-            minesweeperState::leftClick
+            state.grid.numOfRows,
+            state.grid.numOfCols,
+            state.gameCells,
+            state.gameState,
+            state::leftClick
         ) {
-            minesweeperState.rightClick(it)
+            state.rightClick(it)
         }
     }
 }
@@ -43,6 +40,6 @@ fun MinesweeperApp(state: MinesweeperAppState = MinesweeperAppState()) {
 @Composable
 private fun MinesweeperAppPreview() {
     MinesweeperTheme {
-        MinesweeperApp()
+        MinesweeperApp(MinesweeperAppState())
     }
 }

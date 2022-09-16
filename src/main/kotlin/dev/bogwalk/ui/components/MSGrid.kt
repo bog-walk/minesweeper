@@ -12,7 +12,7 @@ import androidx.compose.ui.platform.testTag
 import dev.bogwalk.model.Cell
 import dev.bogwalk.model.CellState
 import dev.bogwalk.model.GameState
-import dev.bogwalk.ui.drawBevelEdge
+import dev.bogwalk.ui.util.drawBevelEdge
 import dev.bogwalk.ui.style.*
 
 @Composable
