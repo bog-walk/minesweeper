@@ -16,7 +16,7 @@ class MinesweeperAppState(
     var gameState by mutableStateOf(GameState.PLAYING)
     var gameCells by mutableStateOf(grid.cells)
 
-    val timer = Timer
+    val timer = Timer.also { it.reset() }
 
     fun leftClick(coordinates: Pair<Int, Int>) {
         if (timer.seconds == 0) timer.start()

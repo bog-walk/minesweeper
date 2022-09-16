@@ -27,8 +27,10 @@ const val HEADER2 = "Width"
 const val HEADER3 = "Mines"
 const val LEVEL_CUSTOM = "CUSTOM"
 const val START_GAME = "NEW GAME"
+const val ERROR_TEXT = "must be between 9 and 50"
+const val ERROR_MINES_TEXT = "Mines between 5 and 20%"
 val dialogWidth = 350.dp
-val dialogHeight = 320.dp
+val dialogHeight = 340.dp
 
 // RulesDialog
 const val MOUSE_X_OFFSET = 8f
@@ -42,6 +44,9 @@ const val RIGHT_CLICK_DESCRIPTION = "Right mouse click animation"
 const val FACE_CLICK = "Start a new game"
 const val LEFT_SCREEN = "Flags available"
 const val RIGHT_SCREEN = "Seconds passed"
+
+// TimeExceededDialog
+const val TIME_OUT = "Time has run out!"
 
 // ResetButton
 const val RESET_TEST_TAG = "reset button"

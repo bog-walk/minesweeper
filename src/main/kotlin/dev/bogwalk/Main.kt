@@ -11,6 +11,7 @@ import dev.bogwalk.model.GameGrid
 import dev.bogwalk.ui.MinesweeperApp
 import dev.bogwalk.ui.components.NewGameDialog
 import dev.bogwalk.ui.components.RulesDialog
+import dev.bogwalk.ui.components.TimeExceededDialog
 import dev.bogwalk.ui.style.*
 import dev.bogwalk.ui.util.GameLevel
 import dev.bogwalk.ui.util.MinesweeperAppState
@@ -51,6 +52,9 @@ fun main() = application {
             }
             if (isRulesDialogOpen) {
                 RulesDialog { isRulesDialogOpen = false }
+            }
+            if (gameState.timer.outOfTime) {
+                TimeExceededDialog { gameState.resetBoard() }
             }
             MinesweeperApp(gameState)
         }

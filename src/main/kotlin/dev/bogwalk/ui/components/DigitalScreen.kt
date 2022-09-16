@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import dev.bogwalk.model.DigitSegment
 import dev.bogwalk.ui.style.*
@@ -22,7 +21,6 @@ fun DigitalScreen(
 
     Row(
         modifier = Modifier
-            //.padding(smallPadding)
             .background(MinesweeperColors.onPrimary),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
@@ -98,7 +96,7 @@ private fun SegmentDigit(
         })
 
         for ((i, path) in segments.withIndex()) {
-            drawPath(path = path, color = Color.Red, alpha = if (segment.isActive(i)) 1F else 0.15F)
+            drawPath(path = path, color = MinesweeperColors.onError, alpha = if (segment.isActive(i)) 1F else 0.15F)
         }
     }
 }

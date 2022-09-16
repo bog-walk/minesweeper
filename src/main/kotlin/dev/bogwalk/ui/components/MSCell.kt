@@ -105,7 +105,7 @@ fun MSCell(
                     else -> Text(
                         text = cell.neighbourMines.toString(),
                         modifier = Modifier.wrapContentSize(Alignment.Center, true),
-                        color = NumberColors.colors[cell.neighbourMines % 3],
+                        color = NumberColors.colors[cell.neighbourMines % 6],
                         textAlign = TextAlign.Center
                     )
                 }
@@ -146,16 +146,6 @@ private fun MSCellPreview() {
             MSCell(GameState.WON, Cell(0 to 0), {}, {})
             // empty clicked
             MSCell(GameState.PLAYING, Cell(0 to 0, state = CellState.SELECTED), {}, {})
-            // non-empty clicked
-            MSCell(GameState.PLAYING, Cell(0 to 0, neighbourMines = 1, state = CellState.SELECTED), {}, {})
-            // non-empty clicked
-            MSCell(GameState.PLAYING, Cell(0 to 0, neighbourMines = 2, state = CellState.SELECTED), {}, {})
-            // non-empty clicked
-            MSCell(GameState.PLAYING, Cell(0 to 0, neighbourMines = 3, state = CellState.SELECTED), {}, {})
-            // non-empty clicked
-            MSCell(GameState.PLAYING, Cell(0 to 0, neighbourMines = 4, state = CellState.SELECTED), {}, {})
-            // non-empty clicked
-            MSCell(GameState.PLAYING, Cell(0 to 0, neighbourMines = 5, state = CellState.SELECTED), {}, {})
             // flagged
             MSCell(GameState.PLAYING, Cell(0 to 0, state = CellState.FLAGGED), {}, {})
             // clicked mine
@@ -166,6 +156,22 @@ private fun MSCellPreview() {
             MSCell(GameState.WON, Cell(0 to 0, neighbourMines = -1, state = CellState.UNSELECTED), {}, {})
             // flagged but not a mine when game lost
             MSCell(GameState.LOST, Cell(0 to 0, state = CellState.FLAGGED), {}, {})
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun MSCellWithTextPreview() {
+    MinesweeperTheme {
+        Column(
+            modifier = Modifier.padding(smallPadding).fillMaxHeight(),
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            for (n in 1..8) {
+                MSCell(GameState.PLAYING, Cell(0 to 0, neighbourMines = n, state = CellState.SELECTED), {}, {})
+            }
         }
     }
 }
