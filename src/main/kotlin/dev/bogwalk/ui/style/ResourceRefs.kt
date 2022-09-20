@@ -3,7 +3,6 @@ package dev.bogwalk.ui.style
 import androidx.compose.ui.unit.dp
 
 const val WINDOW_TITLE = "Minesweeper"
-const val MINESWEEPER_ICON = "minesweeper_icon.svg"
 
 // General dimensions
 val tinyPadding = 2.dp

@@ -5,30 +5,47 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import kotlinx.coroutines.*
 
-object Timer {
+class Timer {
     var seconds by mutableStateOf(0)
     var outOfTime by mutableStateOf(false)
 
+    private var isTiming = false
     private var coroutineScope = CoroutineScope(Dispatchers.Default)
-    private const val LIMIT = 1000
+    private val limit = 1000L
 
     fun start() {
         coroutineScope.launch {
-            while (seconds < LIMIT) {
-                delay(1000L)
+            isTiming = true
+            while (isTiming) {
+                delay(limit)
                 seconds++
+                if (seconds >= limit - 1) {
+                    outOfTime = true
+                    break
+                }
             }
-            outOfTime = true
         }
+    }
+
+    fun pause() {
+        isTiming = false
+    }
+
+    fun restart() {
+        // so that checking menu from unstarted game won't start Timer
+        if (seconds > 0) start()
     }
 
     fun end() {
         coroutineScope.cancel()
+        isTiming = false
     }
 
     fun reset() {
+        coroutineScope.cancel()
         seconds = 0
         outOfTime = false
         coroutineScope = CoroutineScope(Dispatchers.Default)
+        isTiming = false
     }
 }

@@ -29,19 +29,26 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
         state = windowState,
         title = WINDOW_TITLE,
-        icon = painterResource(MINESWEEPER_ICON),
+        icon = painterResource(MINE_ICON),
         resizable = false
     ) {
         MinesweeperTheme {
             MenuBar {
                 Menu(text = OPTIONS_MENU, mnemonic = 'O') {
-                    Item(text = GAME_MENU, mnemonic = 'N') { isNGDialogOpen = true }
-                    Item(text = RULES_MENU, mnemonic = 'R') { isRulesDialogOpen = true }
+                    Item(text = GAME_MENU, mnemonic = 'N') {
+                        gameState.timer.pause()
+                        isNGDialogOpen = true
+                    }
+                    Item(text = RULES_MENU, mnemonic = 'R') {
+                        gameState.timer.pause()
+                        isRulesDialogOpen = true
+                    }
                 }
             }
             if (isNGDialogOpen) {
-                NewGameDialog(currentLevel, { isNGDialogOpen = false }) {
+                NewGameDialog(currentLevel, { isNGDialogOpen = false; gameState.timer.restart() }) {
                     currentLevel = it.first
+                    gameState.timer.end()
                     gameState = MinesweeperAppState(GameGrid(it.second[0], it.second[1], it.second[2]))
                     windowState.size = windowState.size.copy(
                         currentLevel?.size?.first ?: calcWindowWidth(it.second[1]),
@@ -51,7 +58,10 @@ fun main() = application {
                 }
             }
             if (isRulesDialogOpen) {
-                RulesDialog { isRulesDialogOpen = false }
+                RulesDialog {
+                    isRulesDialogOpen = false
+                    gameState.timer.restart()
+                }
             }
             if (gameState.timer.outOfTime) {
                 TimeExceededDialog { gameState.resetBoard() }
