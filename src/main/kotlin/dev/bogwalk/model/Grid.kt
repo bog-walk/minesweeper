@@ -7,7 +7,7 @@ import androidx.compose.runtime.setValue
 abstract class Grid(
     val numOfRows: Int,
     val numOfCols: Int,
-    val numOfMines: Int
+    protected val numOfMines: Int
 ) {
     protected val board = List(numOfRows) { row ->
         MutableList(numOfCols) { col ->
@@ -24,16 +24,25 @@ abstract class Grid(
 
     abstract fun generateMineField()
 
-    // coordinates have to be passed as args instead of Cell to avoid mutation error in recursive call
+    /**
+     * Called by init() in each subclass to generate the count of surrounding mines prior to the start of gameplay.
+     *
+     * Rather than checking a Cell for surrounding mines when it is clicked, each mine that is created during Grid
+     * initialisation invokes this function to increment the count of all its neighbours. A Cell defaults to a count
+     * of 0, so any Cell that is far from a mine will still have the correct property-dependent behaviour when clicked.
+     *
+     * Note that coordinates have to be passed as args instead of Cell to avoid collection mutation errors during
+     * potential recursive calls in expandSelection().
+     */
     protected fun generateNeighbourCount(coordinates: Pair<Int, Int>) {
         for ((row, col) in getNeighbours(coordinates)) {
             val neighbour = board[row][col]
-            board[row][col] = board[row][col].copy(neighbourMines = neighbour.neighbourMines + 1)
+            board[row][col] = neighbour.copy(neighbourMines = neighbour.neighbourMines + 1)
         }
     }
 
     /**
-     * Returns all neighbouring Cells that are not mines or are not flagged(???).
+     * Returns the coordinates of all neighbouring Cells that are not mines and have not been already clicked/flagged.
      */
     private fun getNeighbours(coordinates: Pair<Int, Int>): List<Pair<Int, Int>> {
         val (row, col) = coordinates
@@ -54,11 +63,11 @@ abstract class Grid(
     }
 
     /**
-     * Toggles a Cell as CellState.Flagged.
+     * Toggles a Cell between Unselected and Flagged states.
+     *
+     * @throws IllegalArgumentException if attempting to flag a previously selected Cell (only possible in testing).
      */
-    fun flagCell(coordinates: Pair<Int, Int>) {
-        require(coordinates.first in 0 until numOfRows &&
-                coordinates.second in 0 until numOfCols) { "Invalid coordinates" }
+    open fun flagCell(coordinates: Pair<Int, Int>) {
         val cell = board[coordinates.first][coordinates.second]
         when (cell.state) {
             CellState.UNSELECTED -> {
@@ -70,20 +79,22 @@ abstract class Grid(
                 flagsRemaining++
                 board[coordinates.first][coordinates.second] = cell.copy(state = CellState.UNSELECTED)
             }
-            // calling this function on a selected cell will not be possible through UI disabling the cell
-            else -> throw IllegalArgumentException("Cannot flag previously selected Cell")
+            // a selected Cell will not be able to invoke this due to the UI auto-disabling selected Cells
+            CellState.SELECTED -> throw IllegalArgumentException("Cannot flag previously selected Cell")
         }
     }
 
     /**
-     * Changes state of selected Cell fs previously unselected & returns false only if the selected Cell is a mine.
+     * Switches a valid Cell from Unselected to Selected state and returns false if the clicked Cell is a mine; otherwise,
+     * returns true.
      *
-     * If the amount of unselected Cells manages to decrement to the amount of hidden mines without this function ever
-     * having returned false, this means all mines must have been avoided correctly and the game has been won.
+     * If the amount of unselected Cells manages to decrement to the amount of generated mines without this function ever
+     * having returned false (and thereby ending gameplay), this means all mines must have been successfully avoided and
+     * the game has been won.
+     *
+     * @throws IllegalArgumentException if attempting to select a previously selected Cell (only possible in testing).
      */
-    fun selectCell(coordinates: Pair<Int, Int>): Boolean {
-        require(coordinates.first in 0 until numOfRows &&
-                coordinates.second in 0 until numOfCols) { "Invalid coordinates" }
+    open fun selectCell(coordinates: Pair<Int, Int>): Boolean {
         val cell = board[coordinates.first][coordinates.second]
         return when (cell.state) {
             CellState.UNSELECTED -> {
@@ -97,24 +108,33 @@ abstract class Grid(
                     }
                     if (unselectedCount == numOfMines) {
                         allMinesFound = true
-                        // all unflagged mines should be flagged & count should drop
+                        // all unflagged mines should be flagged & count should drop accordingly.
+                        // could toggle all remaining cells to Flagged state but current setup means the entire Grid
+                        // would need to be checked (worse-case), so UI handles this based on change in overall game state
                         flagsRemaining = 0
                     }
                     true
                 }
             }
-            // calling this function on a selected cell will not be possible through UI disabling the cell
+            // a selected Cell will not be able to invoke this due to the UI auto-disabling selected Cells
             CellState.SELECTED -> throw IllegalArgumentException("Cell already previously selected")
             // calling this function on a flagged cell will have no effect
+            // as a flagged Cell needs to stay enabled for potential right-click events
             CellState.FLAGGED -> true
         }
     }
 
+    /**
+     * Recursively auto-selects all surrounding Cells until a Cell that matches a base case is encountered:
+     *  - it is a mine.
+     *  - it has already been selected or flagged.
+     *  - one of its neighbours is a mine (i.e. it has a surrounding count).
+     */
     private fun expandSelection(coordinates: Pair<Int, Int>) {
         getNeighbours(coordinates).forEach { (r, c) ->
             val neighbour = board[r][c]
             if (neighbour.state == CellState.UNSELECTED && !neighbour.isMine) {
-                board[neighbour.coordinates.first][neighbour.coordinates.second] = neighbour.copy(state = CellState.SELECTED)
+                board[r][c] = neighbour.copy(state = CellState.SELECTED)
                 unselectedCount--
                 if (neighbour.neighbourMines == 0) {
                     expandSelection(neighbour.coordinates)
@@ -127,9 +147,9 @@ abstract class Grid(
         flagsRemaining = numOfMines
         allMinesFound = false
         unselectedCount = numOfRows * numOfCols
-        for ((i, row) in board.withIndex()) {
-            for (j in row.indices) {
-                board[i][j] = Cell(i to j)
+        for (row in 0 until numOfRows) {
+            for (col in 0 until numOfCols) {
+                board[row][col] = Cell(row to col)
             }
         }
         generateMineField()

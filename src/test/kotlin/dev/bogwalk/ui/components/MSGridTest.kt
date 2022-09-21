@@ -3,7 +3,7 @@ package dev.bogwalk.ui.components
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import dev.bogwalk.model.Cell
-import dev.bogwalk.model.GameState
+import dev.bogwalk.ui.util.GameState
 import org.junit.Rule
 import kotlin.test.Test
 

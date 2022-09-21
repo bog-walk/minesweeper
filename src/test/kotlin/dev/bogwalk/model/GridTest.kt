@@ -32,7 +32,7 @@ internal class GridTest {
     }
 
     @Test
-    fun `test initial load state all mines`() {
+    fun `test initial load state with all mines`() {
         val mines = List(6) { it / 3 to it % 3 }
         val board = TestGrid(mines, 2, 3)
         assertEquals(6, board.flagsRemaining)
@@ -322,6 +322,29 @@ internal class GridTest {
                 "5|11000|\n" +
                 "6|00000|\n" +
                 "-|-----|"
+        assertEquals(expected, board.drawBoard())
+    }
+
+    @Test
+    fun `selectCell() is blocked from expanding by flagged cells`() {
+        val mines = listOf(0 to 1, 1 to 3, 2 to 0, 2 to 1)
+        val board = TestGrid(mines, 9, 4)
+        for (c in 0 until 4) {
+            board.flagCell(3 to c)
+        }
+        assertTrue { board.selectCell(8 to 3) }
+        val expected = " |1234|\n" +
+                "-|----|\n" +
+                "1|    |\n" +
+                "2|    |\n" +
+                "3|    |\n" +
+                "4|????|\n" +
+                "5|0000|\n" +
+                "6|0000|\n" +
+                "7|0000|\n" +
+                "8|0000|\n" +
+                "9|0000|\n" +
+                "-|----|"
         assertEquals(expected, board.drawBoard())
     }
 

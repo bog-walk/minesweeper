@@ -5,9 +5,9 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import dev.bogwalk.model.Cell
 import dev.bogwalk.model.CellState
-import dev.bogwalk.model.GameState
 import dev.bogwalk.ui.style.FLAG_DESCRIPTION
 import dev.bogwalk.ui.style.MINE_DESCRIPTION
+import dev.bogwalk.ui.util.GameState
 import org.junit.Rule
 import kotlin.test.Test
 

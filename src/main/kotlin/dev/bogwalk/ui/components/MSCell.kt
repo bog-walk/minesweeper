@@ -21,9 +21,9 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
 import dev.bogwalk.model.Cell
 import dev.bogwalk.model.CellState
-import dev.bogwalk.model.GameState
 import dev.bogwalk.ui.util.drawBevelEdge
 import dev.bogwalk.ui.style.*
+import dev.bogwalk.ui.util.GameState
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import dev.bogwalk.model.*
 
 class MinesweeperAppState(
-    val grid: Grid = GameGrid()
+    val grid: Grid = GameGrid(Level.INTERMEDIATE.values[0], Level.INTERMEDIATE.values[1], Level.INTERMEDIATE.values[2])
 ) {
     val flagsRemaining: Int
         get() = grid.flagsRemaining

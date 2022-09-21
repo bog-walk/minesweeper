@@ -1,12 +1,11 @@
 package dev.bogwalk.model
 
 class GameGrid(
-    numOfRows: Int = 16,
-    numOfCols: Int = 16,
-    numOfMines: Int = 40
+    numOfRows: Int,
+    numOfCols: Int,
+    numOfMines: Int
 ) : Grid(numOfRows, numOfCols, numOfMines) {
     init {
-        println("Generating $numOfRows by $numOfCols grid with $numOfMines mines")
         generateMineField()
     }
 

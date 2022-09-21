@@ -16,6 +16,20 @@ class TestGrid(
         }
     }
 
+    override fun flagCell(coordinates: Pair<Int, Int>) {
+        require(coordinates.first in 0 until numOfRows &&
+                coordinates.second in 0 until numOfCols) { "Invalid coordinates" }
+
+        super.flagCell(coordinates)
+    }
+
+    override fun selectCell(coordinates: Pair<Int, Int>): Boolean {
+        require(coordinates.first in 0 until numOfRows &&
+                coordinates.second in 0 until numOfCols) { "Invalid coordinates" }
+
+        return super.selectCell(coordinates)
+    }
+
     fun drawBoard(countsOnly: Boolean = false): String {
         val output = StringBuilder().append((1..numOfCols).joinToString("", " |", "|\n"))
         output.append("-|${"-".repeat(numOfCols)}|\n")

@@ -16,13 +16,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.rememberDialogState
 import dev.bogwalk.ui.style.*
-import dev.bogwalk.ui.util.GameLevel
+import dev.bogwalk.ui.util.Level
 
 @Composable
 fun NewGameDialog(
-    selectedLevel: GameLevel?,
+    selectedLevel: Level?,
     onCloseRequest: () -> Unit,
-    onConfirm: (Pair<GameLevel?, List<Int>>) -> Unit
+    onConfirm: (Pair<Level?, List<Int>>) -> Unit
 ) {
     Dialog(
         onCloseRequest = { onCloseRequest() },
@@ -39,8 +39,8 @@ fun NewGameDialog(
  */
 @Composable
 private fun GameOptions(
-    selectedLevel: GameLevel?,
-    onNewGame: (Pair<GameLevel?, List<Int>>) -> Unit
+    selectedLevel: Level?,
+    onNewGame: (Pair<Level?, List<Int>>) -> Unit
 ) {
     var selected by remember { mutableStateOf(selectedLevel) }
     var rows by remember { mutableStateOf("") }
@@ -64,7 +64,7 @@ private fun GameOptions(
                 )
             }
         }
-        for (level in GameLevel.values()) {
+        for (level in Level.values()) {
             OptionsRow(level, selected == level) { selected = it }
         }
         // Custom row with 3x text input
@@ -178,9 +178,9 @@ private fun String.isValid(r: String = "", c: String = ""): Boolean {
 
 @Composable
 private fun OptionsRow(
-    level: GameLevel,
+    level: Level,
     isSelected: Boolean,
-    onLevelSelect: (GameLevel) -> Unit
+    onLevelSelect: (Level) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -222,7 +222,7 @@ private fun GameOptionsPreview() {
         Box(Modifier
             .size(width = dialogWidth, height = dialogHeight)
             .border(1.dp, Color.Red)) {
-            GameOptions(GameLevel.INTERMEDIATE) {}
+            GameOptions(Level.INTERMEDIATE) {}
         }
     }
 }

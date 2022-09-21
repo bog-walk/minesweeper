@@ -1,4 +1,4 @@
-package dev.bogwalk.model
+package dev.bogwalk.ui.components
 
 import kotlin.test.Test
 import kotlin.test.assertContentEquals

@@ -13,13 +13,13 @@ import dev.bogwalk.ui.components.NewGameDialog
 import dev.bogwalk.ui.components.RulesDialog
 import dev.bogwalk.ui.components.TimeExceededDialog
 import dev.bogwalk.ui.style.*
-import dev.bogwalk.ui.util.GameLevel
+import dev.bogwalk.ui.util.Level
 import dev.bogwalk.ui.util.MinesweeperAppState
 
 fun main() = application {
-    var currentLevel: GameLevel? = GameLevel.INTERMEDIATE
+    var currentLevel: Level? = Level.INTERMEDIATE
 
-    val windowState = rememberWindowState(width = GameLevel.INTERMEDIATE.size.first, height = GameLevel.INTERMEDIATE.size.second)
+    val windowState = rememberWindowState(width = Level.INTERMEDIATE.size.first, height = Level.INTERMEDIATE.size.second)
     var gameState by remember { mutableStateOf(MinesweeperAppState()) }
 
     var isNGDialogOpen by remember { mutableStateOf(false) }

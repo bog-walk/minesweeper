@@ -4,11 +4,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
-import dev.bogwalk.model.GameState
-import dev.bogwalk.ui.components.ResetButton
 import dev.bogwalk.ui.style.RESET_DEFAULT_DESCRIPTION
 import dev.bogwalk.ui.style.RESET_LOST_DESCRIPTION
 import dev.bogwalk.ui.style.RESET_WON_DESCRIPTION
+import dev.bogwalk.ui.util.GameState
 import org.junit.Rule
 import kotlin.test.Test
 

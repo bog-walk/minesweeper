@@ -15,9 +15,9 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
-import dev.bogwalk.model.GameState
 import dev.bogwalk.ui.util.drawBevelEdge
 import dev.bogwalk.ui.style.*
+import dev.bogwalk.ui.util.GameState
 
 @Composable
 fun ResetButton(
