@@ -23,9 +23,8 @@ fun MSHeader(
             .background(color = MinesweeperColors.primary)
             .padding(windowPadding)
             .drawWithCache {
-                onDrawWithContent {
-                    drawContent()
-                    drawBevelEdge(BEVEL_STROKE * 2, isElevated = false)
+                onDrawBehind {
+                    drawBevelEdge(BEVEL_STROKE_LR, isElevated = false)
                 }
             }
             .fillMaxWidth(),

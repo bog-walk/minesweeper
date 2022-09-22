@@ -22,24 +22,21 @@ internal class ResetButtonTest {
             ResetButton(state.value) {}
         }
 
-        composeTestRule
-            .onNodeWithContentDescription(RESET_DEFAULT_DESCRIPTION)
+        composeTestRule.onNodeWithContentDescription(RESET_DEFAULT_DESCRIPTION)
             .assertExists()
             .assertIsEnabled()
 
         state.value = GameState.WON
         composeTestRule.waitForIdle()
 
-        composeTestRule
-            .onNodeWithContentDescription(RESET_WON_DESCRIPTION)
+        composeTestRule.onNodeWithContentDescription(RESET_WON_DESCRIPTION)
             .assertExists()
             .assertIsEnabled()
 
         state.value = GameState.LOST
         composeTestRule.waitForIdle()
 
-        composeTestRule
-            .onNodeWithContentDescription(RESET_LOST_DESCRIPTION)
+        composeTestRule.onNodeWithContentDescription(RESET_LOST_DESCRIPTION)
             .assertExists()
             .assertIsEnabled()
     }

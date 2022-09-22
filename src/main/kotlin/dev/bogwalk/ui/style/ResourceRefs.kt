@@ -9,9 +9,10 @@ val tinyPadding = 2.dp
 val smallPadding = 10.dp
 val windowPadding = 15.dp
 val headerHeight = 30.dp
-const val BEVEL_STROKE = 2.2F
-const val ELEVATED_BEVEL = 1F
-const val SUNKEN_BEVEL = -2F
+const val BEVEL_STROKE_SM = 2.2f
+const val BEVEL_STROKE_LR = 3f
+const val ELEVATED_BEVEL = 1f
+const val SUNKEN_BEVEL = -2f
 val staticWidth = 46.dp
 val staticHeight = 157.dp
 
@@ -34,6 +35,7 @@ val dialogHeight = 340.dp
 // RulesDialog
 const val MOUSE_X_OFFSET = 8f
 const val MOUSE_Y_OFFSET = 5f
+const val DIGIT_STROKE = 2f
 val mouseWidth = 70.dp
 val mouseHeight = 80.dp
 const val LEFT_CLICK = "Reveal"
@@ -48,24 +50,25 @@ const val RIGHT_SCREEN = "Seconds passed"
 const val TIME_OUT = "Time has run out!"
 
 // ResetButton
-const val RESET_TEST_TAG = "reset button"
 const val RESET_DEFAULT_ICON = "face_default.svg"
 const val RESET_DEFAULT_DESCRIPTION = "smiling face"
 const val RESET_LOST_ICON = "face_lost.svg"
 const val RESET_LOST_DESCRIPTION = "sad face"
 const val RESET_WON_ICON = "face_won.svg"
-const val RESET_WON_DESCRIPTION = "happy face"
+const val RESET_WON_DESCRIPTION = "happy face with sunglasses"
 
 // DigitalScreen
-val digitWidth = 15.dp
-const val DIGIT_STROKE = 4F
+const val DIGITAL_TEST_TAG = "digital screen"
 
 // MSCell
 val cellSize = 20.dp
+val lessTinyPadding = 3.dp
 const val FLAG_ICON = "flag.svg"
 const val FLAG_DESCRIPTION = "tiny red flag"
-const val MINE_ICON = "bomb.svg"
+const val MINE_ICON = "mine.svg"
 const val MINE_DESCRIPTION = "tiny mine"
+const val MINE_X_ICON = "mine_x.svg"
+const val MINE_X_DESCRIPTION = "crossed-out mine"
 
 // MSGrid
 const val GRID_TEST_TAG = "grid column"

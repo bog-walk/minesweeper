@@ -17,7 +17,7 @@ private val MinesweeperPurple = Color(0xffe699ff)
 private val MinesweeperOrange = Color(0xffffbf80)
 private val MinesweeperYellow = Color(0xffffff80)
 // digits
-private val DigitRedInactive = Color(0xff5d0909)
+//private val DigitRedInactive = Color(0xff5d0909)
 private val DigitRedActive = Color(0xffff4d4d)
 // greyscale
 private val VeryLightGray = Color(0xffbdbdbd)
@@ -35,7 +35,7 @@ val MinesweeperColors = darkColors(
     secondaryVariant = VeryLightGray,
     background = Gray,
     surface = Color.White,
-    error = DigitRedInactive,
+    //error = DigitRedInactive,
     onError = DigitRedActive,
     onPrimary = DarkerGray,
     onSurface = Color.Black

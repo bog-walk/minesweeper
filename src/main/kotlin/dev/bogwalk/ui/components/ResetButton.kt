@@ -29,15 +29,14 @@ fun ResetButton(
             .padding(smallPadding)
             .requiredSize(headerHeight)
             .clickable(
-                onClickLabel = null,
+                onClickLabel = FACE_CLICK,
                 role = Role.Button,
                 onClick = { onResetRequest() }
             )
             .background(color = MinesweeperColors.primary)
             .drawWithCache {
-                onDrawWithContent {
-                    drawContent()
-                    drawBevelEdge(BEVEL_STROKE)
+                onDrawBehind {
+                    drawBevelEdge(BEVEL_STROKE_SM)
                 }
             },
         contentAlignment = Alignment.Center
@@ -53,8 +52,9 @@ fun ResetButton(
                 GameState.WON -> RESET_WON_DESCRIPTION
                 GameState.LOST -> RESET_LOST_DESCRIPTION
             },
-            modifier = Modifier.matchParentSize().padding(tinyPadding),
-            tint = Color.White
+            modifier = Modifier.padding(tinyPadding),
+            // must apply this to avoid icon being tinted black due to LocalContentColor
+            tint = Color.Unspecified
         )
     }
 }

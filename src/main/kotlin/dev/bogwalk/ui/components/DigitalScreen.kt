@@ -9,9 +9,27 @@ import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.platform.testTag
 import dev.bogwalk.ui.style.*
 
-enum class DigitSegment(private val cache: Byte) {
+/**
+ * Uses bit masking to store multiple flag values representing whether each segment in a retro 7-segment clock is
+ * supposed to be on to display the digit.
+ *
+ *        0
+ *      """""
+ *    3 "   " 1
+ *      "   "
+ *        2
+ *      """""
+ *      "   "
+ *    6 "   " 4
+ *      """""
+ *        5
+ *
+ * e.g. 7 should be displayed with the top, top right, and bottom right segments on -> 0b0010011.
+ */
+enum class DigitSegment(private val cache: Int) {
     ZERO(0b1111011),
     ONE(0b0010010),
     TWO(0b1100111),
@@ -23,7 +41,7 @@ enum class DigitSegment(private val cache: Byte) {
     EIGHT(0b1111111),
     NINE(0b0111111);
 
-    fun isActive(pathIndex: Int): Boolean = (cache.toInt() shr pathIndex) and 1 == 1
+    fun isActive(pathIndex: Int): Boolean = (cache shr pathIndex) and 1 == 1
 
     companion object {
         fun fromDigit(digit: Int): DigitSegment = values()[digit]
@@ -34,15 +52,16 @@ enum class DigitSegment(private val cache: Byte) {
 fun DigitalScreen(
     count: Int
 ) {
-    var remainder = count
-    var pow = 100
-
     Row(
         modifier = Modifier
+            .testTag(DIGITAL_TEST_TAG)
             .background(MinesweeperColors.onPrimary),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
     ) {
+        var remainder = count
+        var pow = 100
+
         repeat(3) {
             key("Digit $it") {
                 SegmentDigit(DigitSegment.fromDigit(remainder / pow))
@@ -54,67 +73,68 @@ fun DigitalScreen(
     }
 }
 
-/**
- * Based on the retro 7-segment display clock design.
- */
 @Composable
 private fun SegmentDigit(
     segment: DigitSegment
 ) {
     Canvas(
         Modifier
+            .testTag("Digit ${segment.name}")
             .padding(tinyPadding / 2)
-            .requiredSize(digitWidth, headerHeight)
+            .requiredSize(windowPadding, headerHeight)
     ) {
         val canvasWidth = size.width
         val canvasHeight = size.height
-        val segments = mutableListOf<Path>()
+        val origin = 0f
+        val digitStroke = 4f
 
-        segments.add(Path().apply {  // top segment
-            lineTo(DIGIT_STROKE, DIGIT_STROKE)
-            lineTo(canvasWidth - DIGIT_STROKE, DIGIT_STROKE)
-            lineTo(canvasWidth, 0F)
-        })
-        segments.add(Path().apply {  // top-right segment
-            moveTo(canvasWidth, 0F)
-            lineTo(canvasWidth - DIGIT_STROKE, DIGIT_STROKE)
-            lineTo(canvasWidth - DIGIT_STROKE, canvasHeight / 2 - DIGIT_STROKE / 2)
-            lineTo(canvasWidth, canvasHeight / 2)
-        })
-        segments.add(Path().apply {  // midline segment
-            moveTo(0F, canvasHeight / 2)
-            lineTo(DIGIT_STROKE, canvasHeight / 2 - DIGIT_STROKE / 2)
-            lineTo(canvasWidth - DIGIT_STROKE, canvasHeight / 2 - DIGIT_STROKE / 2)
-            lineTo(canvasWidth, canvasHeight / 2)
-            lineTo(canvasWidth - DIGIT_STROKE, canvasHeight / 2 + DIGIT_STROKE / 2)
-            lineTo(DIGIT_STROKE, canvasHeight / 2 + DIGIT_STROKE / 2)
-        })
-        segments.add(Path().apply {  // top-left segment
-            lineTo(DIGIT_STROKE, DIGIT_STROKE)
-            lineTo(DIGIT_STROKE, canvasHeight / 2 - DIGIT_STROKE / 2)
-            lineTo(0F, canvasHeight / 2)
-        })
-        segments.add(Path().apply {  // bottom-right segment
-            moveTo(canvasWidth, canvasHeight / 2)
-            lineTo(canvasWidth - DIGIT_STROKE, canvasHeight / 2 + DIGIT_STROKE / 2)
-            lineTo(canvasWidth - DIGIT_STROKE, canvasHeight - DIGIT_STROKE)
-            lineTo(canvasWidth, canvasHeight)
-        })
-        segments.add(Path().apply {  // bottom segment
-            moveTo(0F, canvasHeight)
-            lineTo(DIGIT_STROKE, canvasHeight - DIGIT_STROKE)
-            lineTo(canvasWidth - DIGIT_STROKE, canvasHeight - DIGIT_STROKE)
-            lineTo(canvasWidth, canvasHeight)
-        })
-        segments.add(Path().apply {  // bottom-left segment
-            moveTo(0F, canvasHeight / 2)
-            lineTo(DIGIT_STROKE, canvasHeight / 2 + DIGIT_STROKE / 2)
-            lineTo(DIGIT_STROKE, canvasHeight - DIGIT_STROKE)
-            lineTo(0F, canvasHeight)
-        })
+        val segments = listOf(
+            Path().apply {  // top segment
+                lineTo(digitStroke, digitStroke)
+                lineTo(canvasWidth - digitStroke, digitStroke)
+                lineTo(canvasWidth, origin)
+            },
+            Path().apply {  // top-right segment
+                moveTo(canvasWidth, origin)
+                lineTo(canvasWidth - digitStroke, digitStroke)
+                lineTo(canvasWidth - digitStroke, canvasHeight / 2 - digitStroke / 2)
+                lineTo(canvasWidth, canvasHeight / 2)
+            },
+            Path().apply {  // midline segment
+                moveTo(origin, canvasHeight / 2)
+                lineTo(digitStroke, canvasHeight / 2 - digitStroke / 2)
+                lineTo(canvasWidth - digitStroke, canvasHeight / 2 - digitStroke / 2)
+                lineTo(canvasWidth, canvasHeight / 2)
+                lineTo(canvasWidth - digitStroke, canvasHeight / 2 + digitStroke / 2)
+                lineTo(digitStroke, canvasHeight / 2 + digitStroke / 2)
+            },
+            Path().apply {  // top-left segment
+                lineTo(digitStroke, digitStroke)
+                lineTo(digitStroke, canvasHeight / 2 - digitStroke / 2)
+                lineTo(origin, canvasHeight / 2)
+            },
+            Path().apply {  // bottom-right segment
+                moveTo(canvasWidth, canvasHeight / 2)
+                lineTo(canvasWidth - digitStroke, canvasHeight / 2 + digitStroke / 2)
+                lineTo(canvasWidth - digitStroke, canvasHeight - digitStroke)
+                lineTo(canvasWidth, canvasHeight)
+            },
+            Path().apply {  // bottom segment
+                moveTo(origin, canvasHeight)
+                lineTo(digitStroke, canvasHeight - digitStroke)
+                lineTo(canvasWidth - digitStroke, canvasHeight - digitStroke)
+                lineTo(canvasWidth, canvasHeight)
+            },
+            Path().apply {  // bottom-left segment
+                moveTo(origin, canvasHeight / 2)
+                lineTo(digitStroke, canvasHeight / 2 + digitStroke / 2)
+                lineTo(digitStroke, canvasHeight - digitStroke)
+                lineTo(origin, canvasHeight)
+            }
+        )
 
         for ((i, path) in segments.withIndex()) {
-            drawPath(path = path, color = MinesweeperColors.onError, alpha = if (segment.isActive(i)) 1F else 0.15F)
+            drawPath(path = path, color = MinesweeperColors.onError, alpha = if (segment.isActive(i)) 1f else 0.15f)
         }
     }
 }

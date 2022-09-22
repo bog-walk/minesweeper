@@ -30,9 +30,8 @@ fun MSGrid(
             .background(color = MinesweeperColors.primary)
             .padding(start = windowPadding, end = windowPadding, bottom = windowPadding)
             .drawWithCache {
-                onDrawWithContent {
-                    drawContent()
-                    drawBevelEdge(BEVEL_STROKE * 2, isElevated = false)
+                onDrawBehind {
+                    drawBevelEdge(BEVEL_STROKE_LR, isElevated = false)
                 }
             },
         verticalArrangement = Arrangement.Center,
