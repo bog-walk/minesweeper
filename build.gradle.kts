@@ -32,7 +32,7 @@ compose.desktop {
         mainClass = "MainKt"
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "compose-tester"
+            packageName = "minesweeper"
             packageVersion = "1.0.0"
         }
     }
