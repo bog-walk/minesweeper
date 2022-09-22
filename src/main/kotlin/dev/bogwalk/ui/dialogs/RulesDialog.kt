@@ -1,4 +1,4 @@
-package dev.bogwalk.ui.components
+package dev.bogwalk.ui.dialogs
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.Canvas
@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.rememberDialogState
+import dev.bogwalk.ui.components.DigitalScreen
+import dev.bogwalk.ui.components.ResetButton
 import dev.bogwalk.ui.style.*
 import dev.bogwalk.ui.util.GameState
 
@@ -31,7 +33,7 @@ fun RulesDialog(
 ) {
     Dialog(
         onCloseRequest = { onCloseRequest() },
-        state = rememberDialogState(size = DpSize(dialogWidth, dialogHeight)),
+        state = rememberDialogState(size = DpSize(dialogSize, dialogSize)),
         title = RULES_MENU,
         resizable = false
     ) {
@@ -46,6 +48,8 @@ private fun MSRules() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        val rulesWidth = headerHeight * 3
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround,
@@ -62,19 +66,19 @@ private fun MSRules() {
         ) {
             Text(
                 text = LEFT_SCREEN,
-                modifier = Modifier.width(headerHeight * 3),
+                modifier = Modifier.width(rulesWidth),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.body1
             )
             Text(
                 text = FACE_CLICK,
-                modifier = Modifier.width(headerHeight * 3),
+                modifier = Modifier.width(rulesWidth),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.body1
             )
             Text(
                 text = RIGHT_SCREEN,
-                modifier = Modifier.width(headerHeight * 3),
+                modifier = Modifier.width(rulesWidth),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.body1
             )
@@ -85,7 +89,7 @@ private fun MSRules() {
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            MouseIcon()
+            MouseIcon(isLeftClick = true)
             MouseIcon(isLeftClick = false)
         }
         Row(
@@ -95,13 +99,13 @@ private fun MSRules() {
         ) {
             Text(
                 text = LEFT_CLICK,
-                modifier = Modifier.width(headerHeight * 3),
+                modifier = Modifier.width(rulesWidth),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.body1
             )
             Text(
                 text = RIGHT_CLICK,
-                modifier = Modifier.width(headerHeight * 3),
+                modifier = Modifier.width(rulesWidth),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.body1
             )
@@ -111,76 +115,97 @@ private fun MSRules() {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun MouseIcon(isLeftClick: Boolean = true) {
+private fun MouseIcon(isLeftClick: Boolean) {
+    val mouseWidth = 70.dp
+    val mouseHeight = 80.dp
+
     Canvas(
         modifier = Modifier
             .padding(smallPadding)
-            .requiredSize(width = mouseWidth, height = mouseHeight),
+            .requiredSize(mouseWidth, mouseHeight),
         contentDescription = if (isLeftClick) LEFT_CLICK_DESCRIPTION else RIGHT_CLICK_DESCRIPTION
     ) {
+        val strokeWidth = 2f
+
         val xOffsets = if (isLeftClick) listOf(4f, 7f, 2f, 5f, 6f, 10f) else listOf(-4f, -7f, -2f, -5f, -6f, -10f)
-        drawLine(MinesweeperColors.onPrimary,
+        // small strokes depicting movement
+        drawLine(
+            MinesweeperColors.onPrimary,
             Offset((size.width + xOffsets[0]) % size.width, 4f),
             Offset((size.width + xOffsets[1]) % size.width, 6f),
-            DIGIT_STROKE / 2,
+            strokeWidth,
             StrokeCap.Round
         )
-        drawLine(MinesweeperColors.onPrimary,
+        drawLine(
+            MinesweeperColors.onPrimary,
             Offset((size.width + xOffsets[2]) % size.width, 8f),
             Offset((size.width + xOffsets[3]) % size.width, 9f),
-            DIGIT_STROKE / 2,
+            strokeWidth,
             StrokeCap.Round
         )
-        drawLine(MinesweeperColors.onPrimary,
+        drawLine(
+            MinesweeperColors.onPrimary,
             Offset((size.width + xOffsets[4]) % size.width, 0f),
             Offset((size.width + xOffsets[5]) % size.width, 4f),
-            DIGIT_STROKE / 2,
+            strokeWidth,
             StrokeCap.Round
         )
 
+        val xOffset = 8f
+        val yOffset = 5f
+
         val bottom = Path().apply {
-            moveTo(MOUSE_X_OFFSET, size.height / 2 - 10)
-            lineTo(size.width - MOUSE_X_OFFSET, size.height / 2 - 10)
+            moveTo(xOffset, size.height / 2 - 10)
+            lineTo(size.width - xOffset, size.height / 2 - 10)
             arcTo(
-                Rect(topLeft = Offset(MOUSE_X_OFFSET, size.height / 2 - 10),
-                    bottomRight = Offset(size.width - MOUSE_X_OFFSET, size.height - MOUSE_Y_OFFSET)),
+                Rect(
+                    topLeft = Offset(xOffset, size.height / 2 - 10),
+                    bottomRight = Offset(size.width - xOffset, size.height - yOffset)
+                ),
                 startAngleDegrees = 0f,
                 sweepAngleDegrees = 180f,
                 forceMoveTo = false
             )
             close()
         }
-        drawPath(bottom, color = MinesweeperColors.onPrimary, style = Stroke(width = DIGIT_STROKE))
+        drawPath(bottom, color = MinesweeperColors.onPrimary, style = Stroke(width = strokeWidth))
+
+        val buttonXOffset = 3f
+        val buttonYOffset = 15f
 
         val left = Path().apply {
-            moveTo(size.width / 2 - 3, MOUSE_Y_OFFSET)
-            lineTo(size.width / 2 - 3, size.height / 2 - 15)
-            lineTo(MOUSE_X_OFFSET, size.height / 2 - 15)
+            moveTo(size.width / 2 - buttonXOffset, yOffset)
+            lineTo(size.width / 2 - buttonXOffset, size.height / 2 - buttonYOffset)
+            lineTo(xOffset, size.height / 2 - buttonYOffset)
             arcTo(
-                Rect(topLeft = Offset(MOUSE_X_OFFSET, MOUSE_Y_OFFSET),
-                    bottomRight = Offset(size.width / 2 - 3, size.height / 2 - 15)),
+                Rect(
+                    topLeft = Offset(xOffset, yOffset),
+                    bottomRight = Offset(size.width / 2 - buttonXOffset, size.height / 2 - buttonYOffset)
+                ),
                 startAngleDegrees = 180f,
                 sweepAngleDegrees = 90f,
                 forceMoveTo = false
             )
             close()
         }
-        drawPath(left, MinesweeperColors.onPrimary, style = if (isLeftClick) Fill else Stroke(width = DIGIT_STROKE))
+        drawPath(left, MinesweeperColors.onPrimary, style = if (isLeftClick) Fill else Stroke(width = strokeWidth))
 
         val right = Path().apply {
-            moveTo(size.width - MOUSE_X_OFFSET, size.height / 2 - 15)
-            lineTo(size.width / 2 + 3, size.height / 2 - 15)
-            lineTo(size.width / 2 + 3, MOUSE_Y_OFFSET)
+            moveTo(size.width - xOffset, size.height / 2 - buttonYOffset)
+            lineTo(size.width / 2 + buttonXOffset, size.height / 2 - buttonYOffset)
+            lineTo(size.width / 2 + buttonXOffset, yOffset)
             arcTo(
-                Rect(topLeft = Offset(size.width / 2 + 3, MOUSE_Y_OFFSET),
-                    bottomRight = Offset(size.width - MOUSE_X_OFFSET, size.height / 2 - 15)),
+                Rect(
+                    topLeft = Offset(size.width / 2 + buttonXOffset, yOffset),
+                    bottomRight = Offset(size.width - xOffset, size.height / 2 - buttonYOffset)
+                ),
                 startAngleDegrees = 270f,
                 sweepAngleDegrees = 90f,
                 forceMoveTo = false
             )
             close()
         }
-        drawPath(right, MinesweeperColors.onPrimary, style = if (isLeftClick) Stroke(width = DIGIT_STROKE) else Fill)
+        drawPath(right, MinesweeperColors.onPrimary, style = if (isLeftClick) Stroke(width = strokeWidth) else Fill)
     }
 }
 
@@ -189,8 +214,8 @@ private fun MouseIcon(isLeftClick: Boolean = true) {
 private fun RulesDialogPreview() {
     MinesweeperTheme {
         Box(Modifier
-            .size(width = dialogWidth, height = dialogHeight)
-            .border(1.dp, Color.Red)) {
+            .size(width = dialogSize, height = dialogSize)
+            .border(tinyPadding, Color.Red)) {
             MSRules()
         }
     }

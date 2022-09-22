@@ -1,4 +1,4 @@
-package dev.bogwalk.ui.components
+package dev.bogwalk.ui.dialogs
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.BorderStroke
@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -22,23 +23,20 @@ import dev.bogwalk.ui.util.Level
 fun NewGameDialog(
     selectedLevel: Level?,
     onCloseRequest: () -> Unit,
-    onConfirm: (Pair<Level?, List<Int>>) -> Unit
+    onNewGame: (Pair<Level?, List<Int>>) -> Unit
 ) {
     Dialog(
         onCloseRequest = { onCloseRequest() },
-        state = rememberDialogState(size = DpSize(dialogWidth, dialogHeight)),
+        state = rememberDialogState(size = DpSize(dialogSize, dialogSize)),
         title = GAME_MENU,
         resizable = false
     ) {
-        GameOptions(selectedLevel, onConfirm)
+        GameOptions(selectedLevel, onNewGame)
     }
 }
 
-/**
- * A mock-table layout.
- */
 @Composable
-private fun GameOptions(
+internal fun GameOptions(
     selectedLevel: Level?,
     onNewGame: (Pair<Level?, List<Int>>) -> Unit
 ) {
@@ -46,14 +44,16 @@ private fun GameOptions(
     var rows by remember { mutableStateOf("") }
     var columns by remember { mutableStateOf("") }
     var mines by remember { mutableStateOf("") }
-    println("$rows $columns $mines")
 
     Column(
+        modifier = Modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start
     ) {
         Row(
-            modifier = Modifier.align(Alignment.End).padding(vertical = smallPadding, horizontal = smallPadding * 2),
+            modifier = Modifier
+                .align(Alignment.End)
+                .padding(vertical = smallPadding, horizontal = cellSize),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -64,66 +64,70 @@ private fun GameOptions(
                 )
             }
         }
+
         for (level in Level.values()) {
             OptionsRow(level, selected == level) { selected = it }
         }
-        // Custom row with 3x text input
+
+        // custom row with 3x text input
         Row(
-            modifier = Modifier.padding(smallPadding),
+            modifier = Modifier
+                .testTag(LEVEL_CUSTOM)
+                .selectable(
+                    selected = selected == null,
+                    role = Role.RadioButton,
+                    onClick = { selected = null }
+                )
+                .padding(smallPadding),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                modifier = Modifier
-                    .selectable(
-                        selected = selected == null,
-                        role = Role.RadioButton,
-                        onClick = { selected = null }
-                    ),
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                RadioButton(
-                    selected = selected == null,
-                    onClick = null,
-                    colors = RadioButtonDefaults.colors(
-                        selectedColor = NumberColors.colors[1],
-                        unselectedColor = MinesweeperColors.onPrimary
-                    )
+            val inputSize = 50.dp
+
+            RadioButton(
+                selected = selected == null,
+                onClick = null,
+                colors = RadioButtonDefaults.colors(
+                    selectedColor = NumberColors.colors[1],
+                    unselectedColor = MinesweeperColors.onPrimary
                 )
-                Spacer(Modifier.width(tinyPadding * 2))
-                Text(
-                    text = LEVEL_CUSTOM.padEnd(13),
-                    style = MaterialTheme.typography.body1
-                )
-            }
-            TextField(
+            )
+            Spacer(Modifier.width(tinyPadding * 2))
+            Text(
+                text = LEVEL_CUSTOM.padEnd(13),
+                style = MaterialTheme.typography.body1
+            )
+            OutlinedTextField(
                 value = rows,
                 onValueChange = { rows = it },
-                modifier = Modifier.size(width = 50.dp, height = 50.dp),
+                modifier = Modifier.testTag("$LEVEL_CUSTOM A").size(inputSize),
                 enabled = selected == null,
                 textStyle = MaterialTheme.typography.body1,
-                isError = rows.isValid()
+                isError = !rows.isValid(isHeight = true),
+                singleLine = true
             )
             Spacer(Modifier.width(smallPadding))
-            TextField(
+            OutlinedTextField(
                 value = columns,
                 onValueChange = { columns = it },
-                modifier = Modifier.size(width = 50.dp, height = 50.dp),
+                modifier = Modifier.testTag("$LEVEL_CUSTOM B").size(inputSize),
                 enabled = selected == null,
                 textStyle = MaterialTheme.typography.body1,
-                isError = columns.isValid()
+                isError = !columns.isValid(isHeight = false),
+                singleLine = true
             )
             Spacer(Modifier.width(smallPadding))
-            TextField(
+            OutlinedTextField(
                 value = mines,
                 onValueChange = { mines = it },
-                modifier = Modifier.size(width = 60.dp, height = 50.dp),
+                modifier = Modifier.testTag("$LEVEL_CUSTOM C").size(inputSize + smallPadding, inputSize),
                 enabled = selected == null,
                 textStyle = MaterialTheme.typography.body1,
-                isError = mines.isValid(rows, columns)
+                isError = rows.isEmpty() || columns.isEmpty() || !mines.isValid(rows, columns),
+                singleLine = true
             )
         }
+
         Row(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
@@ -135,30 +139,27 @@ private fun GameOptions(
                     )
                 },
                 modifier = Modifier.padding(smallPadding),
-                enabled = selected != null || (rows.isValid() && columns.isValid() && mines.isValid(rows, columns)),
-                border = BorderStroke(2.dp, NumberColors.colors[1]),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    disabledContentColor = MaterialTheme.colors.error
-                )
+                enabled = selected != null || (rows.isValid(true) && columns.isValid(false) && mines.isValid(rows, columns)),
+                border = BorderStroke(tinyPadding, NumberColors.colors[1])
             ) {
                 Text(text = START_GAME, style = MaterialTheme.typography.button)
             }
             if (selected == null) {
-                if (!rows.isValid()) {
+                if (!rows.isValid(isHeight = true)) {
                     Text(
-                        text = "Height $ERROR_TEXT",
+                        text = HEIGHT_ERROR_TEXT,
                         color = MaterialTheme.colors.error,
                         style = MaterialTheme.typography.body1,
                     )
-                } else if (!columns.isValid()) {
+                } else if (!columns.isValid(isHeight = false)) {
                     Text(
-                        text = "Width $ERROR_TEXT",
+                        text = WIDTH_ERROR_TEXT,
                         color = MaterialTheme.colors.error,
                         style = MaterialTheme.typography.body1,
                     )
                 } else if (!mines.isValid(rows, columns)) {
                     Text(
-                        text = "$ERROR_MINES_TEXT (${rows.toInt() * columns.toInt() / 5})",
+                        text = "$MINES_ERROR_TEXT ${getMaxMines(rows, columns)}",
                         color = MaterialTheme.colors.error,
                         style = MaterialTheme.typography.body1,
                     )
@@ -168,13 +169,13 @@ private fun GameOptions(
     }
 }
 
-private fun String.isValid(r: String = "", c: String = ""): Boolean {
-    return isNotEmpty() && if (r.isEmpty()) {
-        toInt() in 9..50
-    } else {
-        toInt() in 5..(r.toInt() * c.toInt() / 5)
-    }
-}
+private fun String.isValid(isHeight: Boolean) = isNotEmpty() && toInt() in 9..(if (isHeight) 30 else 50)
+
+private fun String.isValid(r: String, c: String) = isNotEmpty() && toInt() in 5..getMaxMines(r, c)
+
+// amount of mines should not exceed 20% of available cell count
+// short circuit evaluation means this will not be called with empty strings
+private fun getMaxMines(r: String, c: String): Int = r.toInt() * c.toInt() / 5
 
 @Composable
 private fun OptionsRow(
@@ -184,6 +185,7 @@ private fun OptionsRow(
 ) {
     Row(
         modifier = Modifier
+            .testTag(level.name)
             .selectable(
                 selected = isSelected,
                 role = Role.RadioButton,
@@ -220,8 +222,8 @@ private fun OptionsRow(
 private fun GameOptionsPreview() {
     MinesweeperTheme {
         Box(Modifier
-            .size(width = dialogWidth, height = dialogHeight)
-            .border(1.dp, Color.Red)) {
+            .size(width = dialogSize, height = dialogSize)
+            .border(tinyPadding, Color.Red)) {
             GameOptions(Level.INTERMEDIATE) {}
         }
     }
@@ -232,8 +234,8 @@ private fun GameOptionsPreview() {
 private fun GameOptionsInvalidPreview() {
     MinesweeperTheme {
         Box(Modifier
-            .size(width = dialogWidth, height = dialogHeight)
-            .border(1.dp, Color.Red)) {
+            .size(width = dialogSize, height = dialogSize)
+            .border(tinyPadding, Color.Red)) {
             GameOptions(null) {}
         }
     }

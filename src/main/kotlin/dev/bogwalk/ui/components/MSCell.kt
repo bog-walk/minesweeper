@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import dev.bogwalk.model.Cell
 import dev.bogwalk.model.CellState
 import dev.bogwalk.ui.util.drawBevelEdge
@@ -63,13 +64,15 @@ fun MSCell(
             },
         contentAlignment = Alignment.Center
     ) {
+        val cellPadding = 3.dp
+
         when (cell.state) {
             CellState.UNSELECTED -> {
                 if (gameState == GameState.LOST && cell.isMine) {
                     Icon(
                         painter = painterResource(MINE_ICON),
                         contentDescription = MINE_DESCRIPTION,
-                        modifier = Modifier.padding(lessTinyPadding),
+                        modifier = Modifier.padding(cellPadding),
                         tint = Color.Unspecified
                     )
                 }
@@ -77,7 +80,7 @@ fun MSCell(
                     Icon(
                         painter = painterResource(FLAG_ICON),
                         contentDescription = FLAG_DESCRIPTION,
-                        modifier = Modifier.padding(lessTinyPadding),
+                        modifier = Modifier.padding(cellPadding),
                         tint = Color.Unspecified
                     )
                 }
@@ -88,7 +91,7 @@ fun MSCell(
                     -1 -> Icon(
                         painter = painterResource(MINE_ICON),
                         contentDescription = MINE_DESCRIPTION,
-                        modifier = Modifier.padding(lessTinyPadding),
+                        modifier = Modifier.padding(cellPadding),
                         tint = Color.Unspecified
                     )
                     0 -> {}
@@ -105,14 +108,14 @@ fun MSCell(
                     Icon(
                         painter = painterResource(MINE_X_ICON),
                         contentDescription = MINE_X_DESCRIPTION,
-                        modifier = Modifier.padding(lessTinyPadding),
+                        modifier = Modifier.padding(cellPadding),
                         tint = Color.Unspecified
                     )
                 } else {
                     Icon(
                         painter = painterResource(FLAG_ICON),
                         contentDescription = FLAG_DESCRIPTION,
-                        modifier = Modifier.padding(lessTinyPadding),
+                        modifier = Modifier.padding(cellPadding),
                         tint = Color.Unspecified
                     )
                 }

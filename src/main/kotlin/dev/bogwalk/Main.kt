@@ -9,9 +9,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
 import dev.bogwalk.model.GameGrid
 import dev.bogwalk.ui.MinesweeperApp
-import dev.bogwalk.ui.components.NewGameDialog
-import dev.bogwalk.ui.components.RulesDialog
-import dev.bogwalk.ui.components.TimeExceededDialog
+import dev.bogwalk.ui.dialogs.NewGameDialog
+import dev.bogwalk.ui.dialogs.RulesDialog
+import dev.bogwalk.ui.dialogs.TimeExceededDialog
 import dev.bogwalk.ui.style.*
 import dev.bogwalk.ui.util.Level
 import dev.bogwalk.ui.util.MinesweeperAppState

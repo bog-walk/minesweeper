@@ -11,8 +11,8 @@ val windowPadding = 15.dp
 val headerHeight = 30.dp
 const val BEVEL_STROKE_SM = 2.2f
 const val BEVEL_STROKE_LR = 3f
-const val ELEVATED_BEVEL = 1f
-const val SUNKEN_BEVEL = -2f
+val dialogSize = 350.dp
+
 val staticWidth = 46.dp
 val staticHeight = 157.dp
 
@@ -27,24 +27,18 @@ const val HEADER2 = "Width"
 const val HEADER3 = "Mines"
 const val LEVEL_CUSTOM = "CUSTOM"
 const val START_GAME = "NEW GAME"
-const val ERROR_TEXT = "must be between 9 and 50"
-const val ERROR_MINES_TEXT = "Mines between 5 and 20%"
-val dialogWidth = 350.dp
-val dialogHeight = 340.dp
+const val HEIGHT_ERROR_TEXT = "Height must be between 9 and 30"
+const val WIDTH_ERROR_TEXT = "Width must be between 9 and 50"
+const val MINES_ERROR_TEXT = "Mines must be between 5 and"
 
 // RulesDialog
-const val MOUSE_X_OFFSET = 8f
-const val MOUSE_Y_OFFSET = 5f
-const val DIGIT_STROKE = 2f
-val mouseWidth = 70.dp
-val mouseHeight = 80.dp
+const val FACE_CLICK = "Start a new game"
+const val LEFT_SCREEN = "Flags available"
+const val RIGHT_SCREEN = "Seconds passed"
 const val LEFT_CLICK = "Reveal"
 const val RIGHT_CLICK = "Flag/Unflag"
 const val LEFT_CLICK_DESCRIPTION = "Left mouse click animation"
 const val RIGHT_CLICK_DESCRIPTION = "Right mouse click animation"
-const val FACE_CLICK = "Start a new game"
-const val LEFT_SCREEN = "Flags available"
-const val RIGHT_SCREEN = "Seconds passed"
 
 // TimeExceededDialog
 const val TIME_OUT = "Time has run out!"
@@ -62,7 +56,6 @@ const val DIGITAL_TEST_TAG = "digital screen"
 
 // MSCell
 val cellSize = 20.dp
-val lessTinyPadding = 3.dp
 const val FLAG_ICON = "flag.svg"
 const val FLAG_DESCRIPTION = "tiny red flag"
 const val MINE_ICON = "mine.svg"

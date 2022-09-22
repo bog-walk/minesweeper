@@ -10,60 +10,62 @@ import dev.bogwalk.ui.style.*
  */
 fun DrawScope.drawBevelEdge(strokeWidth: Float, isElevated: Boolean = true) {
     if (isElevated) {
+        val elevatedBevel = 1f
         drawLine(
             MinesweeperColors.secondaryVariant,
-            Offset(ELEVATED_BEVEL, ELEVATED_BEVEL),
-            Offset(size.width - ELEVATED_BEVEL, ELEVATED_BEVEL),
+            Offset(elevatedBevel, elevatedBevel),
+            Offset(size.width - elevatedBevel, elevatedBevel),
             strokeWidth,
             StrokeCap.Square
         )
         drawLine(
             MinesweeperColors.secondaryVariant,
-            Offset(ELEVATED_BEVEL, ELEVATED_BEVEL),
-            Offset(ELEVATED_BEVEL, size.height - ELEVATED_BEVEL),
+            Offset(elevatedBevel, elevatedBevel),
+            Offset(elevatedBevel, size.height - elevatedBevel),
             strokeWidth,
             StrokeCap.Square
         )
         drawLine(
             MinesweeperColors.onPrimary,
-            Offset(size.width - ELEVATED_BEVEL, ELEVATED_BEVEL),
-            Offset(size.width - ELEVATED_BEVEL, size.height - ELEVATED_BEVEL),
+            Offset(size.width - elevatedBevel, elevatedBevel),
+            Offset(size.width - elevatedBevel, size.height - elevatedBevel),
             strokeWidth,
             StrokeCap.Square
         )
         drawLine(
             MinesweeperColors.onPrimary,
-            Offset(ELEVATED_BEVEL, size.height - ELEVATED_BEVEL),
-            Offset(size.width - ELEVATED_BEVEL, size.height - ELEVATED_BEVEL),
+            Offset(elevatedBevel, size.height - elevatedBevel),
+            Offset(size.width - elevatedBevel, size.height - elevatedBevel),
             strokeWidth,
             StrokeCap.Square
         )
     } else {
+        val sunkenBevel = -2f
         drawLine(
             MinesweeperColors.onPrimary,
-            Offset(SUNKEN_BEVEL, SUNKEN_BEVEL),
-            Offset(size.width - SUNKEN_BEVEL, SUNKEN_BEVEL),
+            Offset(sunkenBevel, sunkenBevel),
+            Offset(size.width - sunkenBevel, sunkenBevel),
             strokeWidth,
             StrokeCap.Square
         )
         drawLine(
             MinesweeperColors.onPrimary,
-            Offset(SUNKEN_BEVEL, SUNKEN_BEVEL),
-            Offset(SUNKEN_BEVEL, size.height - SUNKEN_BEVEL),
+            Offset(sunkenBevel, sunkenBevel),
+            Offset(sunkenBevel, size.height - sunkenBevel),
             strokeWidth,
             StrokeCap.Square
         )
         drawLine(
             MinesweeperColors.secondaryVariant,
-            Offset(size.width - SUNKEN_BEVEL, SUNKEN_BEVEL),
-            Offset(size.width - SUNKEN_BEVEL, size.height - SUNKEN_BEVEL),
+            Offset(size.width - sunkenBevel, sunkenBevel),
+            Offset(size.width - sunkenBevel, size.height - sunkenBevel),
             strokeWidth,
             StrokeCap.Square
         )
         drawLine(
             MinesweeperColors.secondaryVariant,
-            Offset(SUNKEN_BEVEL, size.height - SUNKEN_BEVEL),
-            Offset(size.width - SUNKEN_BEVEL, size.height - SUNKEN_BEVEL),
+            Offset(sunkenBevel, size.height - sunkenBevel),
+            Offset(size.width - sunkenBevel, size.height - sunkenBevel),
             strokeWidth,
             StrokeCap.Square
         )

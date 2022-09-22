@@ -1,4 +1,4 @@
-package dev.bogwalk.ui.components
+package dev.bogwalk.ui.dialogs
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.BorderStroke
@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.rememberDialogState
 import dev.bogwalk.ui.style.*
@@ -24,7 +23,7 @@ fun TimeExceededDialog(
 ) {
     Dialog(
         onCloseRequest = { onCloseRequest() },
-        state = rememberDialogState(size = DpSize(dialogWidth / 2, dialogHeight / 2)),
+        state = rememberDialogState(size = DpSize(dialogSize / 2, dialogSize / 2)),
         title = "",
         resizable = false
     ) {
@@ -33,7 +32,9 @@ fun TimeExceededDialog(
 }
 
 @Composable
-private fun OutOfTimeError(onCloseRequest: () -> Unit) {
+private fun OutOfTimeError(
+    onCloseRequest: () -> Unit
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -48,7 +49,7 @@ private fun OutOfTimeError(onCloseRequest: () -> Unit) {
         OutlinedButton(
             onClick = { onCloseRequest() },
             modifier = Modifier.padding(smallPadding),
-            border = BorderStroke(2.dp, NumberColors.colors[1])
+            border = BorderStroke(tinyPadding, NumberColors.colors[1])
         ) {
             Text(text = START_GAME, style = MaterialTheme.typography.button)
         }
@@ -60,8 +61,9 @@ private fun OutOfTimeError(onCloseRequest: () -> Unit) {
 private fun RulesDialogPreview() {
     MinesweeperTheme {
         Box(Modifier
-            .size(width = dialogWidth / 2, height = dialogHeight / 2)
-            .border(1.dp, Color.Red)) {
+            .size(width = dialogSize / 2, height = dialogSize / 2)
+            .border(tinyPadding, Color.Red)
+        ) {
             OutOfTimeError {}
         }
     }
