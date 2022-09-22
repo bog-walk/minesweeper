@@ -6,7 +6,8 @@ import androidx.compose.runtime.setValue
 import dev.bogwalk.model.*
 
 class MinesweeperAppState(
-    val grid: Grid = GameGrid(Level.INTERMEDIATE.values[0], Level.INTERMEDIATE.values[1], Level.INTERMEDIATE.values[2])
+    val grid: Grid = GameGrid(Level.INTERMEDIATE.values[0], Level.INTERMEDIATE.values[1], Level.INTERMEDIATE.values[2]),
+    val timer: Timer = Timer()
 ) {
     val flagsRemaining: Int
         get() = grid.flagsRemaining
@@ -15,8 +16,6 @@ class MinesweeperAppState(
 
     var gameState by mutableStateOf(GameState.PLAYING)
     var gameCells by mutableStateOf(grid.cells)
-
-    val timer = Timer()
 
     fun leftClick(coordinates: Pair<Int, Int>) {
         if (timer.seconds == 0) timer.start()

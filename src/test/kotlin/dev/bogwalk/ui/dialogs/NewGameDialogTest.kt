@@ -76,6 +76,7 @@ internal class NewGameDialogTest {
 
     // Currently throwing NotImplementedError
     // due to performTextInput() in DesktopComposeTestRule.desktop.kt:198
+    // https://github.com/JetBrains/compose-jb/issues/1177
     /*@Test
     fun `custom row only enables button when field inputs valid`() {
         composeTestRule.setContent {
@@ -118,6 +119,7 @@ internal class NewGameDialogTest {
             .assertExists("Height error not showing")
         // Currently throwing NotImplementedError
         // due to performTextInput() in DesktopComposeTestRule.desktop.kt:198
+        // https://github.com/JetBrains/compose-jb/issues/1177
         /*
         composeTestRule.onNodeWithTag("$LEVEL_CUSTOM A")
             .performTextInput("20")

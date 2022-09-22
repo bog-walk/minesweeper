@@ -32,20 +32,20 @@ class Timer {
     }
 
     fun restart() {
-        // so that checking menu from unstarted game won't start Timer
+        // ensures that checking menu from unstarted game won't start Timer after dialog closed
         if (seconds > 0) start()
     }
 
     fun end() {
-        coroutineScope.cancel()
         isTiming = false
+        coroutineScope.cancel()
     }
 
     fun reset() {
+        isTiming = false
         coroutineScope.cancel()
         seconds = 0
         outOfTime = false
         coroutineScope = CoroutineScope(Dispatchers.Default)
-        isTiming = false
     }
 }

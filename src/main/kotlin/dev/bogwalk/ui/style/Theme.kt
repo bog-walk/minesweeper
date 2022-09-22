@@ -9,7 +9,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 
-// colors
+// number colors
 private val MinesweeperBlue = Color(0xff80b5ff)
 private val MinesweeperGreen = Color(0xff80ff80)
 private val MinesweeperRed = Color(0xffff9580)
@@ -25,7 +25,9 @@ private val Gray = Color(0xff424242)
 private val DarkerGray = Color(0xff212121)
 
 object NumberColors {
-    val colors = listOf(MinesweeperYellow, MinesweeperBlue, MinesweeperGreen, MinesweeperRed, MinesweeperPurple, MinesweeperOrange)
+    val colors = listOf(
+        MinesweeperYellow, MinesweeperBlue, MinesweeperGreen, MinesweeperRed, MinesweeperPurple, MinesweeperOrange
+    )
 }
 
 val MinesweeperColors = darkColors(

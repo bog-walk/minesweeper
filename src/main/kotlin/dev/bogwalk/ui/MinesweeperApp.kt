@@ -13,7 +13,7 @@ import dev.bogwalk.ui.util.MinesweeperAppState
 @Composable
 fun MinesweeperApp(state: MinesweeperAppState) {
     Column(
-        // this modifier forces header to match dynamic width of grid
+        // this modifier forces MSHeader to match dynamic width of MSGrid
         modifier = Modifier.width(IntrinsicSize.Max),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally

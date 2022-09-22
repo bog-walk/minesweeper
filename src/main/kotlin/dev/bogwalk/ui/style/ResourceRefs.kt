@@ -13,9 +13,6 @@ const val BEVEL_STROKE_SM = 2.2f
 const val BEVEL_STROKE_LR = 3f
 val dialogSize = 350.dp
 
-val staticWidth = 46.dp
-val staticHeight = 157.dp
-
 // MenuBar
 const val OPTIONS_MENU = "Options"
 const val GAME_MENU = "New Game"
