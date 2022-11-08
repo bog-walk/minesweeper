@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
-import androidx.compose.material.Icon
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,7 +20,7 @@ import dev.bogwalk.ui.style.*
 import dev.bogwalk.ui.util.GameState
 
 @Composable
-fun ResetButton(
+internal fun ResetButton(
     gameState: GameState,
     onResetRequest: () -> Unit
 ) {

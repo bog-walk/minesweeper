@@ -4,9 +4,9 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,14 +44,14 @@ private fun OutOfTimeError(
             text = TIME_OUT,
             modifier = Modifier.padding(smallPadding),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.body1
+            style = MaterialTheme.typography.titleSmall
         )
         OutlinedButton(
             onClick = { onCloseRequest() },
             modifier = Modifier.padding(smallPadding),
             border = BorderStroke(tinyPadding, NumberColors.colors[1])
         ) {
-            Text(text = START_GAME, style = MaterialTheme.typography.button)
+            Text(text = START_GAME, style = MaterialTheme.typography.labelSmall)
         }
     }
 }

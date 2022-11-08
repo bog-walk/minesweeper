@@ -1,12 +1,11 @@
 package dev.bogwalk.ui.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.mouseClickable
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,13 +13,12 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.input.pointer.isPrimaryPressed
-import androidx.compose.ui.input.pointer.isSecondaryPressed
-import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.input.pointer.*
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import dev.bogwalk.model.Cell
 import dev.bogwalk.model.CellState
 import dev.bogwalk.ui.util.drawBevelEdge
@@ -29,7 +27,7 @@ import dev.bogwalk.ui.util.GameState
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MSCell(
+internal fun MSCell(
     gameState: GameState,
     cell: Cell,
     onSelectCell: (Pair<Int, Int>) -> Unit,
@@ -37,19 +35,13 @@ fun MSCell(
 ) {
     Box(
         modifier = Modifier
-            .testTag("(${cell.coordinates.first},${cell.coordinates.second})")
+            .semantics(mergeDescendants = true) {
+                testTag = "(${cell.coordinates.first},${cell.coordinates.second})"
+                role = Role.Button
+
+                if (gameState != GameState.PLAYING || cell.state == CellState.SELECTED) disabled()
+            }
             .requiredSize(cellSize)
-            .mouseClickable(
-                enabled = gameState == GameState.PLAYING && cell.state != CellState.SELECTED,
-                onClickLabel = "(${cell.coordinates.first},${cell.coordinates.second})",
-                role = Role.Button,
-                onClick = {
-                    when {
-                        buttons.isPrimaryPressed -> onSelectCell(cell.coordinates)
-                        buttons.isSecondaryPressed -> onFlagCell(cell.coordinates)
-                    }
-                }
-            )
             .background(color = getBackgroundColor(gameState, cell))
             .drawWithCache {
                 onDrawBehind {
@@ -61,7 +53,15 @@ fun MSCell(
                         drawBevelEdge(BEVEL_STROKE_SM)
                     }
                 }
-            },
+            }
+            .onClick(
+                matcher = PointerMatcher.mouse(PointerButton.Primary),
+                onClick = { onSelectCell(cell.coordinates) }
+            )
+            .onClick(
+                matcher = PointerMatcher.mouse(PointerButton.Secondary),
+                onClick = { onFlagCell(cell.coordinates) }
+            ),
         contentAlignment = Alignment.Center
     ) {
         val cellPadding = 3.dp
@@ -97,9 +97,10 @@ fun MSCell(
                     0 -> {}
                     else -> Text(
                         text = cell.neighbourMines.toString(),
-                        modifier = Modifier.wrapContentSize(Alignment.Center, true),
                         color = NumberColors.colors[cell.neighbourMines % 6],
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        lineHeight = 15.sp,  // removes the need for Modifier.wrapContentSize(Alignment.Center, true)
+                        style = MaterialTheme.typography.titleSmall
                     )
                 }
             }

@@ -74,10 +74,7 @@ internal class NewGameDialogTest {
         }
     }
 
-    // Currently throwing NotImplementedError
-    // due to performTextInput() in DesktopComposeTestRule.desktop.kt:198
-    // https://github.com/JetBrains/compose-jb/issues/1177
-    /*@Test
+    @Test
     fun `custom row only enables button when field inputs valid`() {
         composeTestRule.setContent {
             GameOptions(null) {}
@@ -99,13 +96,15 @@ internal class NewGameDialogTest {
 
         for (ch in 'A'..'C') {
             composeTestRule.onNodeWithTag("$LEVEL_CUSTOM $ch")
+                .performTextClearance()
+            composeTestRule.onNodeWithTag("$LEVEL_CUSTOM $ch")
                 .performTextInput("10")
         }
         composeTestRule.waitForIdle()
 
         composeTestRule.onNodeWithText(START_GAME)
             .assertIsEnabled()
-    }*/
+    }
 
     @Test
     fun `correct error messages show when field inputs invalid`() {
@@ -117,10 +116,7 @@ internal class NewGameDialogTest {
             .assertIsSelected()
         composeTestRule.onNodeWithText(HEIGHT_ERROR_TEXT)
             .assertExists("Height error not showing")
-        // Currently throwing NotImplementedError
-        // due to performTextInput() in DesktopComposeTestRule.desktop.kt:198
-        // https://github.com/JetBrains/compose-jb/issues/1177
-        /*
+
         composeTestRule.onNodeWithTag("$LEVEL_CUSTOM A")
             .performTextInput("20")
         composeTestRule.waitForIdle()
@@ -141,6 +137,5 @@ internal class NewGameDialogTest {
 
         composeTestRule.onNodeWithText("$MINES_ERROR_TEXT 80")
             .assertDoesNotExist()
-        */
     }
 }

@@ -1,6 +1,6 @@
 package dev.bogwalk.ui.style
 
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -30,29 +30,32 @@ object NumberColors {
     )
 }
 
-val MinesweeperColors = darkColors(
+val MinesweeperColors = darkColorScheme(
     primary = Gray,
+    onPrimary = DarkerGray,
     secondary = LighterGray,
-    secondaryVariant = VeryLightGray,
+    tertiary = VeryLightGray,
     background = Gray,
     surface = Color.White,
+    onSurface = Color.Black,
     error = Color(0xff5d0909),
-    onError = DigitRedActive,
-    onPrimary = DarkerGray,
-    onSurface = Color.Black
+    onError = DigitRedActive
 )
 
 private val MinesweeperTypography = Typography(
-    defaultFontFamily = FontFamily.Monospace,
-    body1 = TextStyle(
+    titleSmall = TextStyle(
         fontSize = 15.sp,
         fontWeight = FontWeight.Bold,
+        fontFamily = FontFamily.Monospace,
+        letterSpacing = .5.sp,
         textAlign = TextAlign.Left
     ),
-    button = TextStyle(
+    labelSmall = TextStyle(
         color = MinesweeperColors.onSurface,
         fontSize = 12.sp,
         fontWeight = FontWeight.SemiBold,
+        fontFamily = FontFamily.Monospace,
+        letterSpacing = .5.sp,
         textAlign = TextAlign.Center
     )
 )
@@ -62,7 +65,7 @@ fun MinesweeperTheme(
     content: @Composable () -> Unit
 ) {
     MaterialTheme(
-        colors = MinesweeperColors,
+        colorScheme = MinesweeperColors,
         typography = MinesweeperTypography
     ) {
         Surface(content = content)

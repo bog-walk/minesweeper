@@ -12,14 +12,14 @@ fun DrawScope.drawBevelEdge(strokeWidth: Float, isElevated: Boolean = true) {
     if (isElevated) {
         val elevatedBevel = 1f
         drawLine(
-            MinesweeperColors.secondaryVariant,
+            MinesweeperColors.tertiary,
             Offset(elevatedBevel, elevatedBevel),
             Offset(size.width - elevatedBevel, elevatedBevel),
             strokeWidth,
             StrokeCap.Square
         )
         drawLine(
-            MinesweeperColors.secondaryVariant,
+            MinesweeperColors.tertiary,
             Offset(elevatedBevel, elevatedBevel),
             Offset(elevatedBevel, size.height - elevatedBevel),
             strokeWidth,
@@ -56,14 +56,14 @@ fun DrawScope.drawBevelEdge(strokeWidth: Float, isElevated: Boolean = true) {
             StrokeCap.Square
         )
         drawLine(
-            MinesweeperColors.secondaryVariant,
+            MinesweeperColors.tertiary,
             Offset(size.width - sunkenBevel, sunkenBevel),
             Offset(size.width - sunkenBevel, size.height - sunkenBevel),
             strokeWidth,
             StrokeCap.Square
         )
         drawLine(
-            MinesweeperColors.secondaryVariant,
+            MinesweeperColors.tertiary,
             Offset(sunkenBevel, size.height - sunkenBevel),
             Offset(size.width - sunkenBevel, size.height - sunkenBevel),
             strokeWidth,

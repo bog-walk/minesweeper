@@ -9,6 +9,7 @@ import dev.bogwalk.ui.util.MinesweeperAppState
 import org.junit.Rule
 import kotlin.test.Test
 
+@OptIn(ExperimentalTestApi::class)
 internal class MinesweeperAppTest {
     @get:Rule
     val composeTestRule = createComposeRule()
@@ -22,23 +23,7 @@ internal class MinesweeperAppTest {
         }
 
         // initial set up as expected
-        // reset button
-        composeTestRule.onNodeWithContentDescription(RESET_DEFAULT_DESCRIPTION).assertExists()
-        // flags remaining screen
-        composeTestRule.onAllNodesWithTag(DIGITAL_TEST_TAG)[0]
-            .onChildren()
-            .filter(hasTestTag("Digit ZERO")).assertCountEquals(2)
-        composeTestRule.onAllNodesWithTag(DIGITAL_TEST_TAG)[0]
-            .onChildren()
-            .filter(hasTestTag("Digit THREE")).assertCountEquals(1)
-        // seconds passed screen
-        composeTestRule.onAllNodesWithTag(DIGITAL_TEST_TAG)[1]
-            .onChildren()
-            .assertAll(hasTestTag("Digit ZERO"))
-        // main game grid
-        composeTestRule.onNodeWithTag(GRID_TEST_TAG)
-            .onChildren()
-            .assertCountEquals(81).assertAll(isEnabled())
+        composeTestRule.assertInitialLoad(81)
 
         // select first cell to clear all but mines for instant win :)
         composeTestRule.onNodeWithTag("(0,0)").performClick()
@@ -60,9 +45,7 @@ internal class MinesweeperAppTest {
             .assertAll(hasTestTag("Digit ZERO"))
     }
 
-    // Unable to test right click due to NotImplementedErrors from test module:
-    // https://github.com/JetBrains/compose-jb/issues/1177
-    //@OptIn(ExperimentalTestApi::class)
+    @OptIn(ExperimentalTestApi::class)
     @Test
     fun `MinesweeperApp() correct for lost game`() {
         val testGrid = TestGrid(listOf(0 to 0, 2 to 1, 4 to 0))
@@ -72,23 +55,7 @@ internal class MinesweeperAppTest {
         }
 
         // initial set up as expected
-        // reset button
-        composeTestRule.onNodeWithContentDescription(RESET_DEFAULT_DESCRIPTION).assertExists()
-        // flags remaining screen
-        composeTestRule.onAllNodesWithTag(DIGITAL_TEST_TAG)[0]
-            .onChildren()
-            .filter(hasTestTag("Digit ZERO")).assertCountEquals(2)
-        composeTestRule.onAllNodesWithTag(DIGITAL_TEST_TAG)[0]
-            .onChildren()
-            .filter(hasTestTag("Digit THREE")).assertCountEquals(1)
-        // seconds passed screen
-        composeTestRule.onAllNodesWithTag(DIGITAL_TEST_TAG)[1]
-            .onChildren()
-            .assertAll(hasTestTag("Digit ZERO"))
-        // main game grid
-        composeTestRule.onNodeWithTag(GRID_TEST_TAG)
-            .onChildren()
-            .assertCountEquals(25).assertAll(isEnabled())
+        composeTestRule.assertInitialLoad()
 
         // select first cell
         composeTestRule.onNodeWithTag("(4,4)").performClick()
@@ -102,10 +69,7 @@ internal class MinesweeperAppTest {
             .onChildren()
             .filter(hasTextExactly("2")).assertCountEquals(2)
 
-        // flag a mine
-        // androidx.compose.ui.test.DesktopInputDispatcher riddled with TODOs causing NotImplementedErrors...
-        // https://github.com/JetBrains/compose-jb/issues/1177
-        /*
+        // correctly flag a mine
         composeTestRule.onNodeWithTag("(2,1)").performMouseInput { rightClick() }
         composeTestRule.waitForIdle()
 
@@ -115,8 +79,9 @@ internal class MinesweeperAppTest {
         composeTestRule.onAllNodesWithTag(DIGITAL_TEST_TAG)[0]
             .onChildren()
             .filter(hasTestTag("Digit TWO")).assertCountEquals(1)
-        composeTestRule.onNodeWithTag("(2,1)").assert(hasContentDescription(FLAG_DESCRIPTION))
-        */
+        composeTestRule.onNodeWithTag("(2,1)")
+            .assert(hasContentDescription(FLAG_DESCRIPTION))
+
         // select a mine :(
         composeTestRule.onNodeWithTag("(0,0)").performClick()
         composeTestRule.waitForIdle()
@@ -124,15 +89,22 @@ internal class MinesweeperAppTest {
         composeTestRule.onNodeWithContentDescription(RESET_LOST_DESCRIPTION).assertExists()
         composeTestRule.onNodeWithTag(GRID_TEST_TAG).onChildren()
             .assertAll(isNotEnabled())
-            .filter(hasContentDescription(MINE_DESCRIPTION)).assertCountEquals(3)
-        /*
+            .filter(hasContentDescription(MINE_DESCRIPTION)).assertCountEquals(2)
+        // correctly flagged mines stay as flags even if game lost
+        composeTestRule.onNodeWithTag("(2,1)")
+            .assert(hasContentDescription(FLAG_DESCRIPTION))
+        // unselected cells should stay unselected once game over
+        for (x in 1..3) {
+            composeTestRule.onNodeWithTag("($x,0)", useUnmergedTree = true)
+                .onChildren().assertCountEquals(0)
+        }
+
         composeTestRule.onAllNodesWithTag(DIGITAL_TEST_TAG)[0]
             .onChildren()
             .filter(hasTestTag("Digit ZERO")).assertCountEquals(2)
         composeTestRule.onAllNodesWithTag(DIGITAL_TEST_TAG)[0]
             .onChildren()
             .filter(hasTestTag("Digit TWO")).assertCountEquals(1)
-        */
     }
 
     @Test
@@ -142,6 +114,9 @@ internal class MinesweeperAppTest {
         composeTestRule.setContent {
             MinesweeperApp(testState)
         }
+
+        // initial set up as expected
+        composeTestRule.assertInitialLoad()
 
         // select a cell
         composeTestRule.onNodeWithTag("(4,4)").performClick()
@@ -159,22 +134,7 @@ internal class MinesweeperAppTest {
         composeTestRule.onNodeWithContentDescription(RESET_DEFAULT_DESCRIPTION).performClick()
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithContentDescription(RESET_DEFAULT_DESCRIPTION).assertExists()
-        // flags remaining screen
-        composeTestRule.onAllNodesWithTag(DIGITAL_TEST_TAG)[0]
-            .onChildren()
-            .filter(hasTestTag("Digit ZERO")).assertCountEquals(2)
-        composeTestRule.onAllNodesWithTag(DIGITAL_TEST_TAG)[0]
-            .onChildren()
-            .filter(hasTestTag("Digit THREE")).assertCountEquals(1)
-        // seconds passed screen
-        composeTestRule.onAllNodesWithTag(DIGITAL_TEST_TAG)[1]
-            .onChildren()
-            .assertAll(hasTestTag("Digit ZERO"))
-        // main game grid
-        composeTestRule.onNodeWithTag(GRID_TEST_TAG)
-            .onChildren()
-            .assertCountEquals(25).assertAll(isEnabled())
+        composeTestRule.assertInitialLoad()
 
         // select first cell
         composeTestRule.onNodeWithTag("(2,0)").performClick()
@@ -187,9 +147,6 @@ internal class MinesweeperAppTest {
             .filter(isEnabled()).assertCountEquals(24)
 
         // flag 2 mines
-        // androidx.compose.ui.test.DesktopInputDispatcher riddled with TODOs causing NotImplementedErrors...
-        // https://github.com/JetBrains/compose-jb/issues/1177
-        /*
         composeTestRule.onNodeWithTag("(2,1)").performMouseInput { rightClick() }
         composeTestRule.waitForIdle()
         composeTestRule.onNodeWithTag("(0,0)").performMouseInput { rightClick() }
@@ -204,7 +161,7 @@ internal class MinesweeperAppTest {
         composeTestRule.onNodeWithTag(GRID_TEST_TAG)
             .onChildren()
             .filter(hasContentDescription(FLAG_DESCRIPTION)).assertCountEquals(2)
-        */
+
         // select second cell to clear most of grid
         composeTestRule.onNodeWithTag("(0,2)").performClick()
         composeTestRule.waitForIdle()

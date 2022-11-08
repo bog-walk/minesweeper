@@ -5,8 +5,8 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,7 +22,10 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.rememberDialogState
+import dev.bogwalk.model.Cell
+import dev.bogwalk.model.CellState
 import dev.bogwalk.ui.components.DigitalScreen
+import dev.bogwalk.ui.components.MSCell
 import dev.bogwalk.ui.components.ResetButton
 import dev.bogwalk.ui.style.*
 import dev.bogwalk.ui.util.GameState
@@ -68,19 +71,38 @@ private fun MSRules() {
                 text = LEFT_SCREEN,
                 modifier = Modifier.width(rulesWidth),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.body1
+                style = MaterialTheme.typography.titleSmall
             )
             Text(
                 text = FACE_CLICK,
                 modifier = Modifier.width(rulesWidth),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.body1
+                style = MaterialTheme.typography.titleSmall
             )
             Text(
                 text = RIGHT_SCREEN,
                 modifier = Modifier.width(rulesWidth),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.body1
+                style = MaterialTheme.typography.titleSmall
+            )
+        }
+        Spacer(Modifier.height(windowPadding))
+        Row(
+            modifier = Modifier.padding(vertical = tinyPadding).fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            MSCell(GameState.WON, Cell(0 to 0, neighbourMines = 3, state = CellState.SELECTED), {}, {})
+        }
+        Row(
+            modifier = Modifier.padding(vertical = tinyPadding).fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = NUMBER_CELL,
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleSmall
             )
         }
         Spacer(Modifier.height(windowPadding))
@@ -101,13 +123,13 @@ private fun MSRules() {
                 text = LEFT_CLICK,
                 modifier = Modifier.width(rulesWidth),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.body1
+                style = MaterialTheme.typography.titleSmall
             )
             Text(
                 text = RIGHT_CLICK,
                 modifier = Modifier.width(rulesWidth),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.body1
+                style = MaterialTheme.typography.titleSmall
             )
         }
     }
@@ -211,23 +233,23 @@ private fun MouseIcon(isLeftClick: Boolean) {
 
 @Preview
 @Composable
-private fun RulesDialogPreview() {
+private fun AnimatedClickIconPreview() {
     MinesweeperTheme {
-        Box(Modifier
-            .size(width = dialogSize, height = dialogSize)
-            .border(tinyPadding, Color.Red)) {
-            MSRules()
+        Row {
+            MouseIcon(isLeftClick = true)
+            MouseIcon(isLeftClick = false)
         }
     }
 }
 
 @Preview
 @Composable
-private fun AnimatedClickIconPreview() {
+private fun RulesDialogPreview() {
     MinesweeperTheme {
-        Row {
-            MouseIcon(isLeftClick = true)
-            MouseIcon(isLeftClick = false)
+        Box(Modifier
+            .size(width = dialogSize, height = dialogSize)
+            .border(tinyPadding, Color.Red)) {
+            MSRules()
         }
     }
 }

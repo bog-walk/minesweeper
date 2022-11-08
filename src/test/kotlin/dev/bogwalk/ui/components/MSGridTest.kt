@@ -21,9 +21,10 @@ internal class MSGridTest {
             MSGrid(rows, columns, board, GameState.PLAYING, {}, {})
         }
 
-        composeTestRule.onNodeWithTag(GRID_TEST_TAG).onChildren()
-            .filter(hasClickAction())
+        composeTestRule
+            .onNodeWithTag(GRID_TEST_TAG)
+            .onChildren()
+            .filter(isEnabled())
             .assertCountEquals(rows * columns)
-            .assertAll(isEnabled())
     }
 }

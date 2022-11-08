@@ -5,7 +5,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,6 +35,7 @@ fun NewGameDialog(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun GameOptions(
     selectedLevel: Level?,
@@ -60,7 +61,7 @@ internal fun GameOptions(
             for (header in listOf(HEADER1, HEADER2, HEADER3)) {
                 Text(
                     text = header.padEnd(header.length + 1),
-                    style = MaterialTheme.typography.body1
+                    style = MaterialTheme.typography.titleSmall
                 )
             }
         }
@@ -95,14 +96,14 @@ internal fun GameOptions(
             Spacer(Modifier.width(tinyPadding * 2))
             Text(
                 text = LEVEL_CUSTOM.padEnd(13),
-                style = MaterialTheme.typography.body1
+                style = MaterialTheme.typography.titleSmall
             )
             OutlinedTextField(
                 value = rows,
                 onValueChange = { rows = it },
                 modifier = Modifier.testTag("$LEVEL_CUSTOM A").size(inputSize),
                 enabled = selected == null,
-                textStyle = MaterialTheme.typography.body1,
+                textStyle = MaterialTheme.typography.titleSmall,
                 isError = !rows.isValid(isHeight = true),
                 singleLine = true
             )
@@ -112,7 +113,7 @@ internal fun GameOptions(
                 onValueChange = { columns = it },
                 modifier = Modifier.testTag("$LEVEL_CUSTOM B").size(inputSize),
                 enabled = selected == null,
-                textStyle = MaterialTheme.typography.body1,
+                textStyle = MaterialTheme.typography.titleSmall,
                 isError = !columns.isValid(isHeight = false),
                 singleLine = true
             )
@@ -122,7 +123,7 @@ internal fun GameOptions(
                 onValueChange = { mines = it },
                 modifier = Modifier.testTag("$LEVEL_CUSTOM C").size(inputSize + smallPadding, inputSize),
                 enabled = selected == null,
-                textStyle = MaterialTheme.typography.body1,
+                textStyle = MaterialTheme.typography.titleSmall,
                 isError = rows.isEmpty() || columns.isEmpty() || !mines.isValid(rows, columns),
                 singleLine = true
             )
@@ -142,26 +143,26 @@ internal fun GameOptions(
                 enabled = selected != null || (rows.isValid(true) && columns.isValid(false) && mines.isValid(rows, columns)),
                 border = BorderStroke(tinyPadding, NumberColors.colors[1])
             ) {
-                Text(text = START_GAME, style = MaterialTheme.typography.button)
+                Text(text = START_GAME, style = MaterialTheme.typography.labelSmall)
             }
             if (selected == null) {
                 if (!rows.isValid(isHeight = true)) {
                     Text(
                         text = HEIGHT_ERROR_TEXT,
-                        color = MaterialTheme.colors.error,
-                        style = MaterialTheme.typography.body1,
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.titleSmall,
                     )
                 } else if (!columns.isValid(isHeight = false)) {
                     Text(
                         text = WIDTH_ERROR_TEXT,
-                        color = MaterialTheme.colors.error,
-                        style = MaterialTheme.typography.body1,
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.titleSmall,
                     )
                 } else if (!mines.isValid(rows, columns)) {
                     Text(
                         text = "$MINES_ERROR_TEXT ${getMaxMines(rows, columns)}",
-                        color = MaterialTheme.colors.error,
-                        style = MaterialTheme.typography.body1,
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.titleSmall,
                     )
                 }
             }
@@ -177,6 +178,7 @@ private fun String.isValid(r: String, c: String) = isNotEmpty() && toInt() in 5.
 // short circuit evaluation means this will not be called with empty strings
 private fun getMaxMines(r: String, c: String): Int = r.toInt() * c.toInt() / 5
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun OptionsRow(
     level: Level,
@@ -206,12 +208,12 @@ private fun OptionsRow(
         Spacer(Modifier.width(tinyPadding * 2))
         Text(
             text = level.name.padEnd(15),
-            style = MaterialTheme.typography.body1
+            style = MaterialTheme.typography.titleSmall
         )
         for ((i, number) in level.values.withIndex()) {
             Text(
                 text = number.toString().padEnd(if (i == 0) 7 else 6),
-                style = MaterialTheme.typography.body1
+                style = MaterialTheme.typography.titleSmall
             )
         }
     }

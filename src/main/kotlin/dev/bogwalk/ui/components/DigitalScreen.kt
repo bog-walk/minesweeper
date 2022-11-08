@@ -49,7 +49,7 @@ enum class DigitSegment(private val cache: Int) {
 }
 
 @Composable
-fun DigitalScreen(
+internal fun DigitalScreen(
     count: Int
 ) {
     Row(
