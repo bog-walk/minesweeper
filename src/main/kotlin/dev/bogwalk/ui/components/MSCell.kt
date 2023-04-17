@@ -14,6 +14,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.input.pointer.*
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.*
 import androidx.compose.ui.text.style.TextAlign
@@ -35,12 +36,12 @@ internal fun MSCell(
 ) {
     Box(
         modifier = Modifier
-            .semantics(mergeDescendants = true) {
-                testTag = "(${cell.coordinates.first},${cell.coordinates.second})"
+            .semantics {
                 role = Role.Button
 
                 if (gameState != GameState.PLAYING || cell.state == CellState.SELECTED) disabled()
             }
+            .testTag("(${cell.coordinates.first},${cell.coordinates.second})")
             .requiredSize(cellSize)
             .background(color = getBackgroundColor(gameState, cell))
             .drawWithCache {

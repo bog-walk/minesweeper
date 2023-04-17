@@ -178,7 +178,6 @@ private fun String.isValid(r: String, c: String) = isNotEmpty() && toInt() in 5.
 // short circuit evaluation means this will not be called with empty strings
 private fun getMaxMines(r: String, c: String): Int = r.toInt() * c.toInt() / 5
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun OptionsRow(
     level: Level,
