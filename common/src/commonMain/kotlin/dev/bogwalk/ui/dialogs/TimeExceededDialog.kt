@@ -13,22 +13,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogWindow
 import androidx.compose.ui.window.rememberDialogState
+import dev.bogwalk.common.generated.resources.Res
+import dev.bogwalk.common.generated.resources.time_out
 import dev.bogwalk.ui.style.*
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun TimeExceededDialog(
     onCloseRequest: () -> Unit
 ) {
-    Dialog(
+    DialogWindow(
         onCloseRequest = { onCloseRequest() },
         state = rememberDialogState(size = DpSize(dialogSize / 2, dialogSize / 2)),
         title = "",
-        resizable = false
-    ) {
-        OutOfTimeError(onCloseRequest)
-    }
+        resizable = false,
+        content = { OutOfTimeError(onCloseRequest) }
+    )
 }
 
 @Composable
@@ -41,7 +43,7 @@ private fun OutOfTimeError(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = TIME_OUT,
+            text = stringResource(Res.string.time_out),
             modifier = Modifier.padding(smallPadding),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleSmall

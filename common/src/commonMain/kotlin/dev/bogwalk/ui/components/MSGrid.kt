@@ -2,7 +2,10 @@ package dev.bogwalk.ui.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
@@ -11,9 +14,9 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.platform.testTag
 import dev.bogwalk.model.Cell
 import dev.bogwalk.model.CellState
-import dev.bogwalk.ui.util.drawBevelEdge
 import dev.bogwalk.ui.style.*
 import dev.bogwalk.ui.util.GameState
+import dev.bogwalk.ui.util.drawBevelEdge
 
 @Composable
 fun MSGrid(

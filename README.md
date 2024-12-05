@@ -27,19 +27,15 @@ the size of the game grid and the amount of mines.
 
 Clone the repository then pick an option:
 
-- Open the project in IntelliJ IDEA and run `Main.kt`
-
-- `./gradlew run` from an open terminal in the root of the project
-
-- Open the Gradle toolbar and select `minesweeper/Tasks/compose desktop/run`
+- Open the project in IntelliJ IDEA and run `desktop/src/jvmMain/Main.kt` using gutter icon
 
 ## :microscope: Run tests
 
 Clone the repository then pick an option:
 
-- Open the project in IntelliJ IDEA then choose specific tests using gutter icons or right-click the `src/test` folder and
-  select `Run 'Tests in 'minesweeper.test''`
+- Open the project in IntelliJ IDEA then choose specific tests using gutter icons or right-click the `desktop/src/jvmTest` folder and
+  select `Run 'Tests in 'minesweeper.desktop.jvmTest''`
 
-- `./gradlew test` from an open terminal in the root of the project
+- `./gradlew desktop:jvmTest` from an open terminal in the root of the project
 
-- Open the Gradle toolbar and select `minesweeper/Tasks/verification/test`
+- Open the Gradle toolbar and select `minesweeper/Tasks/verification/jvmTest`

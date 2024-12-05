@@ -44,12 +44,12 @@ enum class DigitSegment(private val cache: Int) {
     fun isActive(pathIndex: Int): Boolean = (cache shr pathIndex) and 1 == 1
 
     companion object {
-        fun fromDigit(digit: Int): DigitSegment = values()[digit]
+        fun fromDigit(digit: Int): DigitSegment = entries[digit]
     }
 }
 
 @Composable
-internal fun DigitalScreen(
+fun DigitalScreen(
     count: Int
 ) {
     Row(
@@ -148,7 +148,7 @@ private fun SegmentDigitPreview() {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            for (segment in DigitSegment.values()) {
+            for (segment in DigitSegment.entries) {
                 SegmentDigit(segment)
             }
         }

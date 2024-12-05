@@ -2,7 +2,6 @@ package dev.bogwalk.ui.dialogs
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
@@ -20,8 +19,9 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogWindow
 import androidx.compose.ui.window.rememberDialogState
+import dev.bogwalk.common.generated.resources.*
 import dev.bogwalk.model.Cell
 import dev.bogwalk.model.CellState
 import dev.bogwalk.ui.components.DigitalScreen
@@ -29,19 +29,19 @@ import dev.bogwalk.ui.components.MSCell
 import dev.bogwalk.ui.components.ResetButton
 import dev.bogwalk.ui.style.*
 import dev.bogwalk.ui.util.GameState
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun RulesDialog(
     onCloseRequest: () -> Unit
 ) {
-    Dialog(
+    DialogWindow(
         onCloseRequest = { onCloseRequest() },
         state = rememberDialogState(size = DpSize(dialogSize, dialogSize)),
-        title = RULES_MENU,
-        resizable = false
-    ) {
-        MSRules()
-    }
+        title = stringResource(Res.string.rules_menu),
+        resizable = false,
+        content = { MSRules() }
+    )
 }
 
 @Composable
@@ -68,19 +68,19 @@ private fun MSRules() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = LEFT_SCREEN,
+                text = stringResource(Res.string.left_screen),
                 modifier = Modifier.width(rulesWidth),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleSmall
             )
             Text(
-                text = FACE_CLICK,
+                text = stringResource(Res.string.face_click),
                 modifier = Modifier.width(rulesWidth),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleSmall
             )
             Text(
-                text = RIGHT_SCREEN,
+                text = stringResource(Res.string.right_screen),
                 modifier = Modifier.width(rulesWidth),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleSmall
@@ -100,7 +100,7 @@ private fun MSRules() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = NUMBER_CELL,
+                text = stringResource(Res.string.number_cell),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleSmall
             )
@@ -120,13 +120,13 @@ private fun MSRules() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = LEFT_CLICK,
+                text = stringResource(Res.string.left_click),
                 modifier = Modifier.width(rulesWidth),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleSmall
             )
             Text(
-                text = RIGHT_CLICK,
+                text = stringResource(Res.string.right_click),
                 modifier = Modifier.width(rulesWidth),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleSmall
@@ -135,7 +135,6 @@ private fun MSRules() {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun MouseIcon(isLeftClick: Boolean) {
     val mouseWidth = 70.dp
@@ -145,7 +144,9 @@ private fun MouseIcon(isLeftClick: Boolean) {
         modifier = Modifier
             .padding(smallPadding)
             .requiredSize(mouseWidth, mouseHeight),
-        contentDescription = if (isLeftClick) LEFT_CLICK_DESCRIPTION else RIGHT_CLICK_DESCRIPTION
+        contentDescription = stringResource(
+            if (isLeftClick) Res.string.left_click_description else Res.string.right_click_description
+        )
     ) {
         val strokeWidth = 2f
 

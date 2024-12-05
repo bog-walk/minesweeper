@@ -1,8 +1,11 @@
 package dev.bogwalk.ui.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.*
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.PointerMatcher
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.onClick
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -13,22 +16,29 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.input.pointer.*
+import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.*
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.disabled
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dev.bogwalk.common.generated.resources.Res
+import dev.bogwalk.common.generated.resources.flag
+import dev.bogwalk.common.generated.resources.mine
+import dev.bogwalk.common.generated.resources.mine_x
 import dev.bogwalk.model.Cell
 import dev.bogwalk.model.CellState
-import dev.bogwalk.ui.util.drawBevelEdge
 import dev.bogwalk.ui.style.*
 import dev.bogwalk.ui.util.GameState
+import dev.bogwalk.ui.util.drawBevelEdge
+import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-internal fun MSCell(
+fun MSCell(
     gameState: GameState,
     cell: Cell,
     onSelectCell: (Pair<Int, Int>) -> Unit,
@@ -71,7 +81,7 @@ internal fun MSCell(
             CellState.UNSELECTED -> {
                 if (gameState == GameState.LOST && cell.isMine) {
                     Icon(
-                        painter = painterResource(MINE_ICON),
+                        painter = painterResource(Res.drawable.mine),
                         contentDescription = MINE_DESCRIPTION,
                         modifier = Modifier.padding(cellPadding),
                         tint = Color.Unspecified
@@ -79,7 +89,7 @@ internal fun MSCell(
                 }
                 if (gameState == GameState.WON && cell.isMine) {
                     Icon(
-                        painter = painterResource(FLAG_ICON),
+                        painter = painterResource(Res.drawable.flag),
                         contentDescription = FLAG_DESCRIPTION,
                         modifier = Modifier.padding(cellPadding),
                         tint = Color.Unspecified
@@ -90,7 +100,7 @@ internal fun MSCell(
             CellState.SELECTED -> {
                 when (cell.neighbourMines) {
                     -1 -> Icon(
-                        painter = painterResource(MINE_ICON),
+                        painter = painterResource(Res.drawable.mine),
                         contentDescription = MINE_DESCRIPTION,
                         modifier = Modifier.padding(cellPadding),
                         tint = Color.Unspecified
@@ -108,14 +118,14 @@ internal fun MSCell(
             CellState.FLAGGED -> {
                 if (gameState == GameState.LOST && !cell.isMine) {
                     Icon(
-                        painter = painterResource(MINE_X_ICON),
+                        painter = painterResource(Res.drawable.mine_x),
                         contentDescription = MINE_X_DESCRIPTION,
                         modifier = Modifier.padding(cellPadding),
                         tint = Color.Unspecified
                     )
                 } else {
                     Icon(
-                        painter = painterResource(FLAG_ICON),
+                        painter = painterResource(Res.drawable.flag),
                         contentDescription = FLAG_DESCRIPTION,
                         modifier = Modifier.padding(cellPadding),
                         tint = Color.Unspecified

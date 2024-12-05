@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="window_title">Minesweeper</string>
+
+    <!-- MenuBar -->
+    <string name="options_menu">Options</string>
+    <string name="games_menu">New Game</string>
+    <string name="rules_menu">Rules</string>
+
+    <!-- NewGameDialog -->
+    <string name="header_1">Height</string>
+    <string name="header_2">Width</string>
+    <string name="header_3">Mines</string>
+
+    <!-- RulesDialog -->
+    <string name="face_click">Start a new game</string>
+    <string name="left_screen">Flags available</string>
+    <string name="right_screen">Seconds passed</string>
+    <string name="number_cell">Count of nearby mines</string>
+    <string name="left_click">Reveal</string>
+    <string name="right_click">Flag/Unflag</string>
+    <string name="left_click_description">Left mouse click animation</string>
+    <string name="right_click_description">Right mouse click animation</string>
+
+    <!-- RulesDialog -->
+    <string name="time_out">Time has run out!</string>
+</resources>

@@ -14,10 +14,12 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogWindow
 import androidx.compose.ui.window.rememberDialogState
+import dev.bogwalk.common.generated.resources.*
 import dev.bogwalk.ui.style.*
 import dev.bogwalk.ui.util.Level
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun NewGameDialog(
@@ -25,19 +27,17 @@ fun NewGameDialog(
     onCloseRequest: () -> Unit,
     onNewGame: (Pair<Level?, List<Int>>) -> Unit
 ) {
-    Dialog(
+    DialogWindow(
         onCloseRequest = { onCloseRequest() },
         state = rememberDialogState(size = DpSize(dialogSize, dialogSize)),
-        title = GAME_MENU,
-        resizable = false
-    ) {
-        GameOptions(selectedLevel, onNewGame)
-    }
+        title = stringResource(Res.string.games_menu),
+        resizable = false,
+        content = { GameOptions(selectedLevel, onNewGame) }
+    )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun GameOptions(
+fun GameOptions(
     selectedLevel: Level?,
     onNewGame: (Pair<Level?, List<Int>>) -> Unit
 ) {
@@ -58,7 +58,11 @@ internal fun GameOptions(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            for (header in listOf(HEADER1, HEADER2, HEADER3)) {
+            for (header in listOf(
+                stringResource(Res.string.header_1),
+                stringResource(Res.string.header_2),
+                stringResource(Res.string.header_3))
+            ) {
                 Text(
                     text = header.padEnd(header.length + 1),
                     style = MaterialTheme.typography.titleSmall
@@ -66,7 +70,7 @@ internal fun GameOptions(
             }
         }
 
-        for (level in Level.values()) {
+        for (level in Level.entries) {
             OptionsRow(level, selected == level) { selected = it }
         }
 

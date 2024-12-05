@@ -7,9 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
-import dev.bogwalk.ui.util.drawBevelEdge
 import dev.bogwalk.ui.style.*
 import dev.bogwalk.ui.util.GameState
+import dev.bogwalk.ui.util.drawBevelEdge
 
 @Composable
 fun MSHeader(

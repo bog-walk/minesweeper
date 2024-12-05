@@ -13,14 +13,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
-import dev.bogwalk.ui.util.drawBevelEdge
+import dev.bogwalk.common.generated.resources.*
 import dev.bogwalk.ui.style.*
 import dev.bogwalk.ui.util.GameState
+import dev.bogwalk.ui.util.drawBevelEdge
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun ResetButton(
+fun ResetButton(
     gameState: GameState,
     onResetRequest: () -> Unit
 ) {
@@ -29,7 +31,7 @@ internal fun ResetButton(
             .padding(smallPadding)
             .requiredSize(headerHeight)
             .clickable(
-                onClickLabel = FACE_CLICK,
+                onClickLabel = stringResource(Res.string.face_click),
                 role = Role.Button,
                 onClick = { onResetRequest() }
             )
@@ -43,9 +45,9 @@ internal fun ResetButton(
     ) {
         Icon(
             painter = painterResource(when (gameState) {
-                GameState.PLAYING -> RESET_DEFAULT_ICON
-                GameState.WON -> RESET_WON_ICON
-                GameState.LOST -> RESET_LOST_ICON
+                GameState.PLAYING -> Res.drawable.face_default
+                GameState.WON -> Res.drawable.face_won
+                GameState.LOST -> Res.drawable.face_lost
             }),
             contentDescription = when (gameState) {
                 GameState.PLAYING -> RESET_DEFAULT_DESCRIPTION
